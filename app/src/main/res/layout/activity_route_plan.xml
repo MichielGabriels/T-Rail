@@ -40,6 +40,15 @@
             android:hint="Station vb. Hasselt"
             android:inputType="textPersonName" />
 
+        <Button
+            android:id="@+id/buttonSearch"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Zoeken"
+            android:layout_marginTop="20dp"
+            />
+
     </LinearLayout>
 
     <LinearLayout
