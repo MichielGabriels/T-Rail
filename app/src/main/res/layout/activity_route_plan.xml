@@ -20,7 +20,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/linearLayoutLabels"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3">
 
         <EditText
             android:id="@+id/editText2"
@@ -45,7 +46,13 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="Zoeken"
+            android:layout_marginTop="20dp"
+            android:text="Zoeken" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewFavourites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             />
 
@@ -63,7 +70,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/linearLayoutStationChoice"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3">
 
         <TextView
             android:id="@+id/textView"

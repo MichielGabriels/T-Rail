@@ -15,7 +15,7 @@ public class LaunchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launch);
 
         ClickEvent btnPlanRouteClick =  new ClickEvent((view) -> {
-            Intent intent = new Intent(this,RoutePlanActivity.class);
+            Intent intent = new Intent(this, RoutePlanActivity.class);
             startActivity(intent);
         });
 
