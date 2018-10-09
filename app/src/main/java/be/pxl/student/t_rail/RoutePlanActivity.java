@@ -1,16 +1,19 @@
 package be.pxl.student.t_rail;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import be.pxl.student.t_rail.adapters.FavouritesAdapter;
+import be.pxl.student.t_rail.domainClasses.ClickEvent;
 
 public class RoutePlanActivity extends AppCompatActivity {
 
@@ -57,5 +60,13 @@ public class RoutePlanActivity extends AppCompatActivity {
 
         mAdapter = new FavouritesAdapter(mDummyDataSetFavourites);
         mRecyclerViewFavourites.setAdapter(mAdapter);
+
+        ClickEvent searchClick = new ClickEvent((view) ->{
+           Intent intent = new Intent(this,RouteMasterActivity.class);
+           startActivity(intent);
+        });
+
+        Button searchButton = (Button) findViewById(R.id.buttonSearch);
+        searchButton.setOnClickListener(searchClick);
     }
 }
