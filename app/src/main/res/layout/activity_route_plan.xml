@@ -23,8 +23,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3">
 
-        <EditText
-            android:id="@+id/editText2"
+        <AutoCompleteTextView
+            android:id="@+id/textViewFrom"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
@@ -32,8 +32,8 @@
             android:hint="Station vb. Hasselt"
             android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/editText"
+        <AutoCompleteTextView
+            android:id="@+id/textViewTo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
