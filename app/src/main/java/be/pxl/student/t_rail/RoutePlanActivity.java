@@ -61,6 +61,7 @@ public class RoutePlanActivity extends AppCompatActivity {
         mAdapter = new FavouritesAdapter(mDummyDataSetFavourites);
         mRecyclerViewFavourites.setAdapter(mAdapter);
 
+        //TODO:implement search functionality
         ClickEvent searchClick = new ClickEvent((view) ->{
            Intent intent = new Intent(this,RouteMasterActivity.class);
            startActivity(intent);

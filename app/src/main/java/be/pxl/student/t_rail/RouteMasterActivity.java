@@ -2,6 +2,8 @@ package be.pxl.student.t_rail;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -17,10 +19,14 @@ public class RouteMasterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route_master);
 
         Route route = new Route("Aarschot","Hasselt","12:21","12:45","+2","+5",3,2);
+        Route secondRoute = new Route("Aarschot","Hasselt","12:27","12:55","0","0",3,9);
         ArrayList<Route> routes = new ArrayList<>();
         routes.add(route);
+        routes.add(secondRoute);
 
         RecyclerView recyclerView =(RecyclerView) findViewById(R.id.recycleViewRoutes);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         RoutePortraitAdapter adapter = new RoutePortraitAdapter(routes);
         recyclerView.setAdapter(adapter);
 

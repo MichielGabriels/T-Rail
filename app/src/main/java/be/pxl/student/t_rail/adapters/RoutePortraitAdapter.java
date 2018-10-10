@@ -28,8 +28,8 @@ public class RoutePortraitAdapter extends RecyclerView.Adapter<RoutePortraitAdap
 
         public RoutePortraitViewHolder(View view){
             super(view);
-            txtStationFrom = (TextView) view.findViewById(R.id.textViewFrom);
-            txtStationTo = (TextView) view.findViewById(R.id.textViewTo);
+            txtStationFrom = (TextView) view.findViewById(R.id.routeListStationFrom);
+            txtStationTo = (TextView) view.findViewById(R.id.routeListStationTo);
             txtTimeDeparture = (TextView) view.findViewById(R.id.routeListTimeDeparture);
             txtTimeArrival = (TextView) view.findViewById(R.id.routeListTimeArrival);
             txtDelayDeparture = (TextView) view.findViewById(R.id.routeListDelayDeparture);
@@ -42,15 +42,15 @@ public class RoutePortraitAdapter extends RecyclerView.Adapter<RoutePortraitAdap
         mRoutes = routes;
     }
 
-    @NonNull
+
     @Override
-    public RoutePortraitViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public RoutePortraitViewHolder onCreateViewHolder( ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.routes_list_item,viewGroup,false);
         return new RoutePortraitViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RoutePortraitViewHolder routePortraitViewHolder, int selectedIndex) {
+    public void onBindViewHolder( RoutePortraitViewHolder routePortraitViewHolder, int selectedIndex) {
         Route route  = mRoutes.get(selectedIndex);
         routePortraitViewHolder.txtStationFrom.setText(route.getStationDeparture());
         routePortraitViewHolder.txtStationTo.setText(route.getStationArrival());
