@@ -18,8 +18,8 @@ public class RouteMasterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_master);
 
-        Route route = new Route("Aarschot","Hasselt","12:21","12:45","+2","+5",3,2);
-        Route secondRoute = new Route("Aarschot","Hasselt","12:27","12:55","0","0",3,9);
+        Route route = new Route("Aarschot","Begijnendijk","12:21","12:45","+2","+5",3,2);
+        Route secondRoute = new Route("Aarschot","Begijnendijk","12:27","13:00","+15","+13",3,9);
         ArrayList<Route> routes = new ArrayList<>();
         routes.add(route);
         routes.add(secondRoute);
