@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/textViewFrom"
+        android:id="@+id/textViewStation1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -15,13 +14,13 @@
         android:layout_marginEnd="8dp"
         android:text="Van:"
         android:textSize="15dp"
-        app:layout_constraintEnd_toStartOf="@+id/routeListStationFrom"
+        app:layout_constraintEnd_toStartOf="@+id/routeListStation1"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/routeListStationFrom"
+        android:id="@+id/routeListStation1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="152dp"
@@ -32,9 +31,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/routeListTimeDeparture"
+        android:id="@+id/routeListTimeStation2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="92dp"
         android:layout_marginBottom="8dp"
@@ -42,18 +42,20 @@
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/routeListTimeArrival"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/routeListStation2"
+        app:layout_constraintTop_toBottomOf="@+id/routeListTimeStation1"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/routeListDelayDeparture"
+        android:id="@+id/routeListPlatformStation1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
         android:text="+1"
         android:textSize="15dp"
-        app:layout_constraintStart_toEndOf="@+id/routeListTimeArrival"
+        app:layout_constraintStart_toEndOf="@+id/routeListTimeStation1"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -67,11 +69,11 @@
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFrom"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStation1"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/routeListStationTo"
+        android:id="@+id/routeListStation2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="152dp"
@@ -81,18 +83,21 @@
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/routeListStationFrom"
+        app:layout_constraintTop_toBottomOf="@+id/routeListStation1"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/routeListTimeArrival"
+        android:id="@+id/routeListTimeStation1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="92dp"
         android:text="15:30"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/routeListStation1"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -105,8 +110,8 @@
         android:text="+1"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/routeListTimeDeparture"
-        app:layout_constraintTop_toBottomOf="@+id/routeListDelayDeparture" />
+        app:layout_constraintStart_toEndOf="@+id/routeListTimeStation2"
+        app:layout_constraintTop_toBottomOf="@+id/routeListPlatformStation1" />
 
 
 </android.support.constraint.ConstraintLayout>

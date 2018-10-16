@@ -1,5 +1,6 @@
 package be.pxl.student.t_rail;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -8,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import be.pxl.student.t_rail.adapters.RoutePortraitAdapter;
+import be.pxl.student.t_rail.adapters.RouteMasterAdapter;
 import be.pxl.student.t_rail.domainClasses.Route;
 
 public class RouteMasterActivity extends AppCompatActivity {
@@ -24,11 +25,10 @@ public class RouteMasterActivity extends AppCompatActivity {
         routes.add(route);
         routes.add(secondRoute);
 
-        RecyclerView recyclerView =(RecyclerView) findViewById(R.id.recycleViewRoutes);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycleViewRoutes);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RoutePortraitAdapter adapter = new RoutePortraitAdapter(routes);
+        RouteMasterAdapter adapter = new RouteMasterAdapter(routes);
         recyclerView.setAdapter(adapter);
-
     }
 }

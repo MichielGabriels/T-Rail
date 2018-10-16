@@ -38,7 +38,7 @@ public class RoutePlanActivity extends AppCompatActivity {
         stations.add("Brussel");
         stations.add("Hasselt");
 
-        AutoCompleteTextView textViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
+        AutoCompleteTextView textViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewStation1);
         AutoCompleteTextView textViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
 
         ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this,R.layout.autocomplete_stations,stations);
