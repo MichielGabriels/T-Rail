@@ -63,7 +63,7 @@ public class RoutePlanActivity extends AppCompatActivity {
 
         //TODO:implement search functionality
         ClickEvent searchClick = new ClickEvent((view) ->{
-           Intent intent = new Intent(this,RouteMasterActivity.class);
+           Intent intent = new Intent(this,RouteMasterDetailActivity.class);
            startActivity(intent);
         });
 

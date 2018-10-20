@@ -17,8 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RoutePlanActivity" android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".RouteDetailActivity" android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".RouteMasterActivity" android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".RouteMasterDetailActivity" android:windowSoftInputMode="adjustNothing"/>
     </application>
 
 </manifest>
