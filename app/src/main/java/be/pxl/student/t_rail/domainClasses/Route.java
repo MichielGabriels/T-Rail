@@ -1,5 +1,12 @@
 package be.pxl.student.t_rail.domainClasses;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Route {
 
     private String stationDeparture;
@@ -10,10 +17,11 @@ public class Route {
     private String delayArrival;
     private int platformDeparture;
     private int platformArrival;
+    private Vehicle vehicle;
 
 
     public Route(String stationDeparture,String stationArrival,String timeDeparture,String timeArrival
-            ,String delayDeparture,String delayArrival,int platformDeparture,int platformArrival){
+            ,String delayDeparture,String delayArrival,int platformDeparture,int platformArrival,String trainId){
         setStationDeparture(stationDeparture);
         setStationArrival(stationArrival);
         setTimeDeparture(timeDeparture);
@@ -22,6 +30,28 @@ public class Route {
         setDelayArrival(delayArrival);
         setPlatformDeparture(platformDeparture);
         setPlatformArrival(platformArrival);
+        setVehicle(new Vehicle(trainId));
+    }
+
+    public Route(JSONObject jsonObject){
+        try{
+            JSONObject departureObject = jsonObject.getJSONObject("departure");
+            JSONObject arrivalObject = jsonObject.getJSONObject("arrival");
+
+            setStationDeparture(departureObject.getString("station"));
+            setStationArrival(arrivalObject.getString("station"));
+            setTimeDeparture(extractTimeFromJsonObject(departureObject.getString("time")));
+            setTimeArrival(extractTimeFromJsonObject(arrivalObject.getString("time")));
+            setDelayDeparture(departureObject.getString("delay"));
+            setDelayArrival(arrivalObject.getString("delay"));
+            setPlatformDeparture(departureObject.getInt("platform"));
+            setPlatformArrival(departureObject.getInt("platform"));
+            vehicle = new Vehicle(departureObject.getString("vehicle"));
+        }
+
+        catch (JSONException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
     public String getDelayDeparture() {
@@ -86,5 +116,20 @@ public class Route {
 
     public void setPlatformDeparture(int platformDeparture) {
         this.platformDeparture = platformDeparture;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    private String extractTimeFromJsonObject(String unixTime){
+       long unixTimeHolder = Long.valueOf(unixTime);
+       Date dateTime = new Date(unixTimeHolder * 1000);
+       DateFormat formatter = new SimpleDateFormat("HH:mm");
+       return formatter.format(dateTime);
     }
 }

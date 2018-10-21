@@ -1,6 +1,5 @@
 package be.pxl.student.t_rail.adapters;
 
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,7 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
         public RouteDetailViewHolder(View view) {
             super(view);
 
-            txtStation1 = (TextView) view.findViewById(R.id.textViewStation1);
+            txtStation1 = (TextView) view.findViewById(R.id.textViewFrom);
             txtStation2 = (TextView) view.findViewById(R.id.textViewStation2);
             txtTime1 = (TextView) view.findViewById(R.id.routeListTimeStation1);
             txtTime2 = (TextView) view.findViewById(R.id.routeListTimeStation2);

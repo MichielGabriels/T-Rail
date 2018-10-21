@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/textViewStation1"
+        android:id="@+id/textViewFrom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -55,7 +55,7 @@
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewStation1"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFrom"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -69,7 +69,7 @@
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/textViewStation1"
+        app:layout_constraintStart_toStartOf="@+id/textViewFrom"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

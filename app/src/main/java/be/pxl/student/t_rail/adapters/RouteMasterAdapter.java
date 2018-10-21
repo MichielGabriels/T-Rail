@@ -28,8 +28,8 @@ public class RouteMasterAdapter extends RecyclerView.Adapter<RouteMasterAdapter.
             super(view);
             txtStationFrom = (TextView) view.findViewById(R.id.routeListStation1);
             txtStationTo = (TextView) view.findViewById(R.id.routeListStation2);
-            txtTimeDeparture = (TextView) view.findViewById(R.id.routeListTimeStation2);
-            txtTimeArrival = (TextView) view.findViewById(R.id.routeListTimeStation1);
+            txtTimeDeparture = (TextView) view.findViewById(R.id.routeListTimeStation1);
+            txtTimeArrival = (TextView) view.findViewById(R.id.routeListTimeStation2);
             txtDelayDeparture = (TextView) view.findViewById(R.id.routeListPlatformStation1);
             txtDelayArrival = (TextView) view.findViewById(R.id.routeListDelayArrival);
         }
