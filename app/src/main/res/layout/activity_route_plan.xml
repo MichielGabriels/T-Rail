@@ -21,7 +21,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/linearLayoutLabels"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintVertical_bias="0.0">
 
         <AutoCompleteTextView
             android:id="@+id/textViewStation1"
@@ -49,12 +49,17 @@
             android:layout_marginTop="20dp"
             android:text="Zoeken" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewFavourites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewFavourites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp" />
+        </ScrollView>
 
     </LinearLayout>
 
@@ -71,7 +76,7 @@
         app:layout_constraintEnd_toStartOf="@+id/linearLayoutStationChoice"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/textView"
@@ -79,6 +84,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:gravity="center"
+            android:textSize="20dp"
             android:text="Van:" />
 
         <TextView
@@ -87,6 +93,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:gravity="center"
+            android:textSize="20dp"
             android:text="Naar:" />
 
     </LinearLayout>
