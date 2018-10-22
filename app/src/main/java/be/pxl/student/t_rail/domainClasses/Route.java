@@ -91,11 +91,11 @@ public class Route {
     }
 
     public void setDelayArrival(String delayArrival) {
-        this.delayArrival = delayArrival;
+        this.delayArrival = "+" + convertDelayFromSecondsToMinutes(delayArrival);
     }
 
     public void setDelayDeparture(String delayDeparture) {
-        this.delayDeparture = delayDeparture;
+        this.delayDeparture = "+" + convertDelayFromSecondsToMinutes(delayDeparture);
     }
 
     public void setStationDeparture(String stationDeparture) {
@@ -131,5 +131,9 @@ public class Route {
        Date dateTime = new Date(unixTimeHolder * 1000);
        DateFormat formatter = new SimpleDateFormat("HH:mm");
        return formatter.format(dateTime);
+    }
+
+    private String convertDelayFromSecondsToMinutes(String seconds){
+       return String.valueOf(Integer.valueOf(seconds)/60);
     }
 }

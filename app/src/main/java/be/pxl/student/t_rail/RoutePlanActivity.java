@@ -9,7 +9,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import be.pxl.student.t_rail.adapters.FavouritesAdapter;
@@ -63,12 +67,14 @@ public class RoutePlanActivity extends AppCompatActivity {
 
 
         //TODO: implement dateTime picker
+        //TODO: remove current system date and time after dateTime picker is implemented
+        //TODO: implement proper check for input fields
         ClickEvent searchClick = new ClickEvent((view) ->{
-           /*Intent intent = new Intent(this,RouteMasterDetailActivity.class);
-           startActivity(intent);*/
            if(checkInputFields()){
+                String currentTime = getCurrentSystemTime();
+                String currentDate = getCurrentSystemDate();
                RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this,"Routes ophalen",true,RouteMasterDetailActivity.class);
-               String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl",textViewDepartureStation.getText(),textViewArrivalStation.getText());
+               String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s",textViewDepartureStation.getText(),textViewArrivalStation.getText(),currentTime,currentDate);
                task.execute(url);
            }
 
@@ -100,5 +106,17 @@ public class RoutePlanActivity extends AppCompatActivity {
         stationsArray.add("Aarschot");
         stationsArray.add("Brussel");
         stationsArray.add("Hasselt");
+    }
+
+    private String getCurrentSystemTime(){
+        Date time = Calendar.getInstance().getTime();
+        Format formatter = new SimpleDateFormat("HHmm");
+        return formatter.format(time);
+    }
+
+    private String getCurrentSystemDate(){
+        Date date = Calendar.getInstance().getTime();
+        Format formatter = new SimpleDateFormat("ddMMyy");
+        return formatter.format(date);
     }
 }
