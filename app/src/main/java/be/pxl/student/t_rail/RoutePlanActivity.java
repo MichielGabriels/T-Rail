@@ -68,18 +68,15 @@ public class RoutePlanActivity extends AppCompatActivity {
 
         //TODO: implement dateTime picker
         //TODO: remove current system date and time after dateTime picker is implemented
-        //TODO: implement proper check for input fields
         ClickEvent searchClick = new ClickEvent((view) ->{
-           if(checkInputFields()){
-                String currentTime = getCurrentSystemTime();
-                String currentDate = getCurrentSystemDate();
-               RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this,"Routes ophalen",true,RouteMasterDetailActivity.class);
-               String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s",textViewDepartureStation.getText(),textViewArrivalStation.getText(),currentTime,currentDate);
+           if(checkInputFields()) {
+               String currentTime = getCurrentSystemTime();
+               String currentDate = getCurrentSystemDate();
+               RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, "Routes ophalen", true, RouteMasterDetailActivity.class);
+               String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewDepartureStation.getText(), textViewArrivalStation.getText(), currentTime, currentDate);
                task.execute(url);
-           }
-
-           else{
-               Toast.makeText(this,"De stations zijn ongeldig",Toast.LENGTH_LONG).show();
+           } else {
+               Toast.makeText(this,"Geen of ongeldig(e) station(s)!",Toast.LENGTH_LONG).show();
            }
         });
 
@@ -87,12 +84,18 @@ public class RoutePlanActivity extends AppCompatActivity {
         searchButton.setOnClickListener(searchClick);
     }
 
-    //TODO: add conditions for invalid input
     private boolean checkInputFields(){
-        if(!textViewDepartureStation.getText().equals("") && !textViewArrivalStation.getText().equals("")){
-            return true;
+        if(textViewDepartureStation.getText().toString().trim().equals("") && textViewArrivalStation.getText().toString().trim().equals("")){
+            return false;
         }
-        return false;
+
+        ArrayList<String> stations = StationCollection.getStations();
+
+        if (!stations.contains(textViewDepartureStation.getText().toString()) || !stations.contains(textViewArrivalStation.getText().toString())) {
+            return false;
+        }
+
+        return true;
     }
 
     private void initTestComponents(ArrayList<String> stationsArray,List<String> dummyFavorites){
