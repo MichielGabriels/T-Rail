@@ -96,6 +96,24 @@
             android:textSize="20dp"
             android:text="Naar:" />
 
+        <EditText
+            android:id="@+id/editTextTime"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="00:00"
+            android:inputType="time"
+            android:maxLength="5" />
+
+        <EditText
+            android:id="@+id/editTextDate"
+            android:layout_width="83dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="01/12/18"
+            android:inputType="date"
+            android:maxLength="8" />
+
     </LinearLayout>
 
 
