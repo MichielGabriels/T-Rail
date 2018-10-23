@@ -1,10 +1,10 @@
-package be.pxl.student.t_rail.domainClasses;
+package be.pxl.student.t_rail.services;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class ConnectionManager {
+public class ConnectionService {
 
     public static boolean hasActiveInternetConnection(Context context){
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

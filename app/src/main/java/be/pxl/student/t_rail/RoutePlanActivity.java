@@ -21,7 +21,7 @@ import java.util.List;
 import be.pxl.student.t_rail.adapters.FavouritesAdapter;
 import be.pxl.student.t_rail.domainClasses.ClickEvent;
 import be.pxl.student.t_rail.domainClasses.ConnectionAlertDialog;
-import be.pxl.student.t_rail.domainClasses.ConnectionManager;
+import be.pxl.student.t_rail.services.ConnectionService;
 import be.pxl.student.t_rail.domainClasses.StationCollection;
 import be.pxl.student.t_rail.tasks.RoutePlannerHttpTask;
 
@@ -129,7 +129,7 @@ public class RoutePlanActivity extends AppCompatActivity {
             }
         };
 
-        if(ConnectionManager.hasActiveInternetConnection(RoutePlanActivity.this)){
+        if(ConnectionService.hasActiveInternetConnection(RoutePlanActivity.this)){
             searchRoute();
         }
 
