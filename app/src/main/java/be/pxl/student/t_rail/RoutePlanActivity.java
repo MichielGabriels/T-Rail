@@ -44,44 +44,11 @@ public class RoutePlanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
 
-        textViewDepartureStation = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
-        textViewArrivalStation = (AutoCompleteTextView) findViewById(R.id.textViewTo);
-
-        mEditTextTime = (EditText) findViewById(R.id.editTextTime);
-        mEditTextDate = (EditText) findViewById(R.id.editTextDate);
-
-        mRecyclerViewFavourites = (RecyclerView) findViewById(R.id.recyclerViewFavourites);
-
         //init test data
         mDummyDataSetFavourites = new ArrayList<>();
         initTestComponents(mDummyDataSetFavourites);
 
-        //init textviews
-        AutoCompleteTextView textViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
-        AutoCompleteTextView textViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
-
-        ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this,R.layout.autocomplete_stations,StationCollection.getStations());
-        textViewFrom.setThreshold(1);
-        textViewTo.setThreshold(1);
-
-        textViewFrom.setAdapter(textViewAdapter);
-        textViewTo.setAdapter(textViewAdapter);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
-
-        mAdapter = new FavouritesAdapter(mDummyDataSetFavourites);
-        mRecyclerViewFavourites.setAdapter(mAdapter);
-
-
-        //TODO: implement dateTime picker
-        //TODO: remove current system date and time after dateTime picker is implemented
-        ClickEvent searchClick = new ClickEvent((view) ->{
-            performSearch();
-        });
-
-        Button searchButton = (Button) findViewById(R.id.buttonSearch);
-        searchButton.setOnClickListener(searchClick);
+        initViewComponents();
     }
 
     private boolean checkInputFields(){
@@ -188,5 +155,41 @@ public class RoutePlanActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this,"Geen of ongeldig(e) station(s)!",Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void initViewComponents(){
+        mRecyclerViewFavourites = (RecyclerView) findViewById(R.id.recyclerViewFavourites);
+
+        //init textviews
+        textViewDepartureStation = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
+        textViewArrivalStation = (AutoCompleteTextView) findViewById(R.id.textViewTo);
+        AutoCompleteTextView textViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
+        AutoCompleteTextView textViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
+        mEditTextTime = (EditText) findViewById(R.id.editTextTime);
+        mEditTextDate = (EditText) findViewById(R.id.editTextDate);
+
+        //init adapters for suggestions
+        ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this,R.layout.autocomplete_stations,StationCollection.getStations());
+        textViewFrom.setThreshold(1);
+        textViewTo.setThreshold(1);
+
+        textViewFrom.setAdapter(textViewAdapter);
+        textViewTo.setAdapter(textViewAdapter);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
+
+        mAdapter = new FavouritesAdapter(mDummyDataSetFavourites);
+        mRecyclerViewFavourites.setAdapter(mAdapter);
+
+
+        //TODO: implement dateTime picker
+        //TODO: remove current system date and time after dateTime picker is implemented
+        ClickEvent searchClick = new ClickEvent((view) ->{
+            performSearch();
+        });
+
+        Button searchButton = (Button) findViewById(R.id.buttonSearch);
+        searchButton.setOnClickListener(searchClick);
     }
 }
