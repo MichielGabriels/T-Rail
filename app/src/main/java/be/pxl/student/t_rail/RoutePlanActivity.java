@@ -1,5 +1,6 @@
 package be.pxl.student.t_rail;
 
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +15,13 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import be.pxl.student.t_rail.adapters.FavouritesAdapter;
 import be.pxl.student.t_rail.domainClasses.ClickEvent;
+import be.pxl.student.t_rail.domainClasses.ConnectionAlertDialog;
+import be.pxl.student.t_rail.domainClasses.ConnectionManager;
 import be.pxl.student.t_rail.domainClasses.StationCollection;
 import be.pxl.student.t_rail.tasks.RoutePlannerHttpTask;
 
@@ -75,21 +77,7 @@ public class RoutePlanActivity extends AppCompatActivity {
         //TODO: implement dateTime picker
         //TODO: remove current system date and time after dateTime picker is implemented
         ClickEvent searchClick = new ClickEvent((view) ->{
-           if(checkInputFields()) {
-               String time = formatTime(mEditTextTime.getText().toString());
-               if (time.equals("")) {
-                   return;
-               }
-               String date = formatDate(mEditTextDate.getText().toString());
-               if (date.equals("")) {
-                   return;
-               }
-               RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, "Routes ophalen", true, RouteMasterDetailActivity.class);
-               String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewDepartureStation.getText(), textViewArrivalStation.getText(), time, date);
-               task.execute(url);
-           } else {
-               Toast.makeText(this,"Geen of ongeldig(e) station(s)!",Toast.LENGTH_LONG).show();
-           }
+            performSearch();
         });
 
         Button searchButton = (Button) findViewById(R.id.buttonSearch);
@@ -157,5 +145,48 @@ public class RoutePlanActivity extends AppCompatActivity {
         Format formatter = new SimpleDateFormat("ddMMyy");
 
         return formatter.format(formattedDate);
+    }
+
+    private void performSearch(){
+        DialogInterface.OnClickListener negativeEvent = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                performSearch();
+            }
+        };
+        DialogInterface.OnClickListener positiveEvent = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RoutePlanActivity.this.finishAffinity();
+            }
+        };
+
+        if(ConnectionManager.hasActiveInternetConnection(RoutePlanActivity.this)){
+            searchRoute();
+        }
+
+        else{
+            new ConnectionAlertDialog(RoutePlanActivity.this,positiveEvent,negativeEvent);
+        }
+
+    }
+
+    private void searchRoute(){
+        if(checkInputFields()) {
+            String time = formatTime(mEditTextTime.getText().toString());
+            if (time.equals("")) {
+                return;
+            }
+            String date = formatDate(mEditTextDate.getText().toString());
+            if (date.equals("")) {
+                return;
+            }
+            RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, "Routes ophalen", true, RouteMasterDetailActivity.class);
+            String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewDepartureStation.getText(), textViewArrivalStation.getText(), time, date);
+            task.execute(url);
+        } else {
+            Toast.makeText(this,"Geen of ongeldig(e) station(s)!",Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import be.pxl.student.t_rail.domainClasses.ClickEvent;
+import be.pxl.student.t_rail.domainClasses.ConnectionAlertDialog;
+import be.pxl.student.t_rail.domainClasses.ConnectionManager;
 import be.pxl.student.t_rail.interfaces.IEvent;
 import be.pxl.student.t_rail.tasks.StationsHttpTask;
 
@@ -24,14 +26,6 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
 
-    private boolean hasActiveInternetConnection(){
-        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
-        if(activeNetworkInfo == null || !activeNetworkInfo.isConnected()){
-            return false;
-        }
-        return true;
-    }
 
     private void checkConnection(){
         DialogInterface.OnClickListener negativeEvent = new DialogInterface.OnClickListener() {
@@ -48,14 +42,13 @@ public class LaunchActivity extends AppCompatActivity {
             }
         };
 
-        if(hasActiveInternetConnection()){
+        if(ConnectionManager.hasActiveInternetConnection(LaunchActivity.this)){
             StationsHttpTask task = new StationsHttpTask(LaunchActivity.this);
             task.execute();
         }
 
         else{
-            new AlertDialog.Builder(LaunchActivity.this).setTitle("Netwerk error").setMessage("Deze applicatie heeft een mobiele verbinding nodig.")
-                    .setPositiveButton("Afsluiten",positiveEvent).setNegativeButton("Probeer Opnieuw",negativeEvent).setCancelable(false).show();
+           new ConnectionAlertDialog(LaunchActivity.this,positiveEvent,negativeEvent);
         }
 
     }
