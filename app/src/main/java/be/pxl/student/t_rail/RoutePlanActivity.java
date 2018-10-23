@@ -7,9 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +34,9 @@ public class RoutePlanActivity extends AppCompatActivity {
     private AutoCompleteTextView textViewDepartureStation;
     private AutoCompleteTextView textViewArrivalStation;
 
+    private EditText mEditTextTime;
+    private EditText mEditTextDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,18 +45,19 @@ public class RoutePlanActivity extends AppCompatActivity {
         textViewDepartureStation = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
         textViewArrivalStation = (AutoCompleteTextView) findViewById(R.id.textViewTo);
 
+        mEditTextTime = (EditText) findViewById(R.id.editTextTime);
+        mEditTextDate = (EditText) findViewById(R.id.editTextDate);
+
         mRecyclerViewFavourites = (RecyclerView) findViewById(R.id.recyclerViewFavourites);
 
         //init test data
-        ArrayList<String> stations = new ArrayList<String>();
         mDummyDataSetFavourites = new ArrayList<>();
-        initTestComponents(stations,mDummyDataSetFavourites);
+        initTestComponents(mDummyDataSetFavourites);
 
         //init textviews
         AutoCompleteTextView textViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
         AutoCompleteTextView textViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
 
-       // ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this,R.layout.autocomplete_stations,stations));
         ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this,R.layout.autocomplete_stations,StationCollection.getStations());
         textViewFrom.setThreshold(1);
         textViewTo.setThreshold(1);
@@ -68,18 +74,21 @@ public class RoutePlanActivity extends AppCompatActivity {
 
         //TODO: implement dateTime picker
         //TODO: remove current system date and time after dateTime picker is implemented
-        //TODO: implement proper check for input fields
         ClickEvent searchClick = new ClickEvent((view) ->{
-           if(checkInputFields()){
-                String currentTime = getCurrentSystemTime();
-                String currentDate = getCurrentSystemDate();
-               RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this,"Routes ophalen",true,RouteMasterDetailActivity.class);
-               String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s",textViewDepartureStation.getText(),textViewArrivalStation.getText(),currentTime,currentDate);
+           if(checkInputFields()) {
+               String time = formatTime(mEditTextTime.getText().toString());
+               if (time.equals("")) {
+                   return;
+               }
+               String date = formatDate(mEditTextDate.getText().toString());
+               if (date.equals("")) {
+                   return;
+               }
+               RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, "Routes ophalen", true, RouteMasterDetailActivity.class);
+               String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewDepartureStation.getText(), textViewArrivalStation.getText(), time, date);
                task.execute(url);
-           }
-
-           else{
-               Toast.makeText(this,"De stations zijn ongeldig",Toast.LENGTH_LONG).show();
+           } else {
+               Toast.makeText(this,"Geen of ongeldig(e) station(s)!",Toast.LENGTH_LONG).show();
            }
         });
 
@@ -87,36 +96,66 @@ public class RoutePlanActivity extends AppCompatActivity {
         searchButton.setOnClickListener(searchClick);
     }
 
-    //TODO: add conditions for invalid input
     private boolean checkInputFields(){
-        if(!textViewDepartureStation.getText().equals("") && !textViewArrivalStation.getText().equals("")){
-            return true;
+        if(textViewDepartureStation.getText().toString().trim().equals("") && textViewArrivalStation.getText().toString().trim().equals("")){
+            return false;
         }
-        return false;
+
+        ArrayList<String> stations = StationCollection.getStations();
+
+        if (!stations.contains(textViewDepartureStation.getText().toString()) || !stations.contains(textViewArrivalStation.getText().toString())) {
+            return false;
+        }
+
+        return true;
     }
 
-    private void initTestComponents(ArrayList<String> stationsArray,List<String> dummyFavorites){
+    private void initTestComponents(List<String> dummyFavorites){
         dummyFavorites.add("Hasselt --> Aarschot");
         dummyFavorites.add("Aarschot --> Hasselt");
         dummyFavorites.add("Hasselt --> Kiewit");
         dummyFavorites.add("Kiewit --> Hasselt");
-
-        stationsArray.add("Antwerpen");
-        stationsArray.add("Leuven");
-        stationsArray.add("Aarschot");
-        stationsArray.add("Brussel");
-        stationsArray.add("Hasselt");
+        dummyFavorites.add("Hasselt --> Aarschot");
+        dummyFavorites.add("Aarschot --> Hasselt");
+        dummyFavorites.add("Hasselt --> Kiewit");
+        dummyFavorites.add("Kiewit --> Hasselt");
+        dummyFavorites.add("Hasselt --> Aarschot");
+        dummyFavorites.add("Aarschot --> Hasselt");
+        dummyFavorites.add("Hasselt --> Kiewit");
+        dummyFavorites.add("Kiewit --> Hasselt");
     }
 
-    private String getCurrentSystemTime(){
-        Date time = Calendar.getInstance().getTime();
+    private String formatTime(String time){
+        SimpleDateFormat formatterStringToDate = new SimpleDateFormat("HH:mm");
+        formatterStringToDate.setLenient(false);
+
+        Date formattedTime = null;
+        try {
+            formattedTime = formatterStringToDate.parse(time);
+        } catch (ParseException ex) {
+            Toast.makeText(this, "Ongeldig tijdstip!", Toast.LENGTH_LONG).show();
+            return "";
+        }
+
         Format formatter = new SimpleDateFormat("HHmm");
-        return formatter.format(time);
+
+        return formatter.format(formattedTime);
     }
 
-    private String getCurrentSystemDate(){
-        Date date = Calendar.getInstance().getTime();
+    private String formatDate(String date){
+        SimpleDateFormat formatterStringToDate = new SimpleDateFormat("dd/MM/yy");
+        formatterStringToDate.setLenient(false);
+
+        Date formattedDate = null;
+        try {
+            formattedDate = formatterStringToDate.parse(date);
+        } catch (ParseException ex) {
+            Toast.makeText(this, "Ongeldige datum!", Toast.LENGTH_LONG).show();
+            return "";
+        }
+
         Format formatter = new SimpleDateFormat("ddMMyy");
-        return formatter.format(date);
+
+        return formatter.format(formattedDate);
     }
 }
