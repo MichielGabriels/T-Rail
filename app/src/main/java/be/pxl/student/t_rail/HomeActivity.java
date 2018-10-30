@@ -19,7 +19,15 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        ClickEvent btnFavouritesClick = new ClickEvent((view) -> {
+            Intent intent = new Intent(this, FavouritesActivity.class);
+            startActivity(intent);
+        });
+
         Button routeButton = (Button) findViewById(R.id.buttonRoute);
         routeButton.setOnClickListener(btnPlanRouteClick);
+
+        Button favouritesButton = (Button) findViewById(R.id.buttonFavourites);
+        favouritesButton.setOnClickListener(btnFavouritesClick);
     }
 }
