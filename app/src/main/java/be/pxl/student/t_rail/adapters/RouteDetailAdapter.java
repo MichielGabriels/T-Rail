@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import be.pxl.student.t_rail.R;
@@ -23,6 +25,7 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
         public TextView txtTime2;
         public TextView txtPlatform1;
         public TextView txtPlatform2;
+        //public TextView txtDelay1;
 
         public RouteDetailViewHolder(View view) {
             super(view);
@@ -33,6 +36,7 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
             txtTime2 = (TextView) view.findViewById(R.id.routeListTimeStation2);
             txtPlatform1 = (TextView) view.findViewById(R.id.routeListPlatformStation1);
             txtPlatform2 = (TextView) view.findViewById(R.id.routeListPlatformStation2);
+            //txtDelay1 = (TextView)
         }
     }
 
@@ -50,11 +54,11 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
     public void onBindViewHolder(RouteDetailViewHolder routeDetailViewHolder, int selectedIndex) {
         RouteDetail routeDetail = mRouteDetails.get(selectedIndex);
         routeDetailViewHolder.txtStation1.setText(routeDetail.getStation1());
-        routeDetailViewHolder.txtStation2.setText(routeDetail.getStation2());
+        //routeDetailViewHolder.txtStation2.setText(routeDetail.getStation2());
         routeDetailViewHolder.txtTime1.setText(routeDetail.getTime1());
-        routeDetailViewHolder.txtTime2.setText(routeDetail.getTime2());
+        //routeDetailViewHolder.txtTime2.setText(routeDetail.getTime2());
         routeDetailViewHolder.txtPlatform1.setText(routeDetail.getPlatform1());
-        routeDetailViewHolder.txtPlatform2.setText(routeDetail.getPlatform2());
+        //routeDetailViewHolder.txtPlatform2.setText(routeDetail.getPlatform2());
     }
 
     @Override

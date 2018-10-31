@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
@@ -55,18 +56,18 @@ public class RouteDetailHttpTask extends AsyncTask<String,String,String> {
     @Override
     protected void onPostExecute(String response) {
        dialog.close();
+        RouteDetailFragment detailFragment = new RouteDetailFragment();
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        Bundle dataBundle = new Bundle();
+        dataBundle.putString("routeDetails",response);
+        detailFragment.setArguments(dataBundle);
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){
-            RouteDetailFragment detailFragment = new RouteDetailFragment();
-            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentDetailHolder,detailFragment);
-            transaction.commit();
         }
 
         else{
-            RouteDetailFragment detailFragment = new RouteDetailFragment();
-            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentMasterHolder,detailFragment);
-            transaction.commit();
         }
+        transaction.commit();
     }
 }
