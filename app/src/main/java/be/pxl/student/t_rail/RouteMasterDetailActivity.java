@@ -1,20 +1,13 @@
 package be.pxl.student.t_rail;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 
-import java.util.ArrayList;
+import be.pxl.student.t_rail.tasks.RouteDetailHttpTask;
 
-import be.pxl.student.t_rail.adapters.RouteMasterAdapter;
-import be.pxl.student.t_rail.domainClasses.Route;
-
-public class RouteMasterDetailActivity extends AppCompatActivity {
+public class RouteMasterDetailActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +18,18 @@ public class RouteMasterDetailActivity extends AppCompatActivity {
 
         Bundle dataBundle = new Bundle();
         dataBundle.putString("connections",connections);
+        initializeMasterFragement(dataBundle);
+    }
 
+    private void initializeMasterFragement(Bundle dataBundle){
         RouteMasterFragment masterFragment = new RouteMasterFragment();
         masterFragment.setArguments(dataBundle);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentMaster,masterFragment);
+        transaction.replace(R.id.fragmentMasterHolder,masterFragment);
         transaction.commit();
+    }
+
+    public void initializeDetailFragment(String vehicleId,int orientation){
+        new RouteDetailHttpTask(this,this,orientation).execute(vehicleId);
     }
 }

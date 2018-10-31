@@ -149,7 +149,7 @@ public class RoutePlanActivity extends AppCompatActivity {
             if (date.equals("")) {
                 return;
             }
-            RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, "Routes ophalen", true, RouteMasterDetailActivity.class);
+            RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, true, RouteMasterDetailActivity.class);
             String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewDepartureStation.getText(), textViewArrivalStation.getText(), time, date);
             task.execute(url);
         } else {

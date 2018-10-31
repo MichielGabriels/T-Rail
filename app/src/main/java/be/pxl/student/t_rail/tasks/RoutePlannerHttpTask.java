@@ -7,33 +7,31 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import be.pxl.student.t_rail.domainClasses.RouteDialog;
 import be.pxl.student.t_rail.services.ApiService;
 
 public class RoutePlannerHttpTask extends AsyncTask<String,String,String> {
 
     private Context _context;
-    private ProgressDialog dialog;
+    private RouteDialog dialog;
     private ApiService _service;
     private boolean _navigateAfter;
     private Class _nextActivity;
 
-    public RoutePlannerHttpTask(Context context, String dialogTitle){
+    public RoutePlannerHttpTask(Context context){
         _context = context;
-        dialog = new ProgressDialog(_context);
-        dialog.setTitle(dialogTitle);
+        dialog = new RouteDialog(_context);
         _service = new ApiService();
     }
 
-    public RoutePlannerHttpTask(Context context, String dialogTitle, boolean navigateAfter, Class nextActivity){
-        this(context,dialogTitle);
+    public RoutePlannerHttpTask(Context context, boolean navigateAfter, Class nextActivity){
+        this(context);
         _navigateAfter = navigateAfter;
         _nextActivity = nextActivity;
     }
 
     @Override
     protected void onPreExecute() {
-        dialog.setCancelable(false);
-        dialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
         dialog.show();
     }
 
@@ -63,6 +61,6 @@ public class RoutePlannerHttpTask extends AsyncTask<String,String,String> {
                 _context.startActivity(intent);
             }
         }
-        dialog.hide();
+        dialog.close();
     }
 }
