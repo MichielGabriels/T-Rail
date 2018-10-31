@@ -1,5 +1,6 @@
 package be.pxl.student.t_rail;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,12 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,12 +22,15 @@ import java.util.Map;
 
 import be.pxl.student.t_rail.adapters.RouteMasterAdapter;
 import be.pxl.student.t_rail.domainClasses.ClickEvent;
+import be.pxl.student.t_rail.domainClasses.ConnectionAlertDialog;
 import be.pxl.student.t_rail.domainClasses.Route;
+import be.pxl.student.t_rail.services.ConnectionService;
 
 public class RouteMasterFragment extends Fragment {
 
     private String mConnectionJsonString;
     private HashMap<String,String> vehicleIdMap;
+    private RouteMasterDetailActivity parentActivity;
 
     public RouteMasterFragment(){
 
@@ -43,6 +45,7 @@ public class RouteMasterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle dataBundle = getArguments();
         View view = inflater.inflate(R.layout.fragment_route_master, container, false);
+        parentActivity = (RouteMasterDetailActivity) getActivity();
         vehicleIdMap = new HashMap<>();
 
         //orientation changed
@@ -99,11 +102,7 @@ public class RouteMasterFragment extends Fragment {
         ArrayList<Route> routes = extractRoutesFromJsonArray(connections);
 
         ClickEvent itemClick = new ClickEvent((v) ->{
-            TextView departTime  = (TextView) v.findViewById(R.id.routeListTimeStation1);
-            String time = departTime.getText().toString();
-            String vehicleId = vehicleIdMap.get(time);
-            RouteMasterDetailActivity activity = (RouteMasterDetailActivity) getActivity();
-            activity.initializeDetailFragment(vehicleId,getResources().getConfiguration().orientation);
+            search(v);
         });
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteMaster);
@@ -128,5 +127,36 @@ public class RouteMasterFragment extends Fragment {
             String[] subElements = elements[index].split("=>");
             vehicleIdMap.put(subElements[0],subElements[1]);
         }
+    }
+
+    private void search(View v){
+        DialogInterface.OnClickListener negativeEvent = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                search(v);
+            }
+        };
+        DialogInterface.OnClickListener positiveEvent = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                parentActivity.finishAffinity();
+            }
+        };
+
+        if(ConnectionService.hasActiveInternetConnection(parentActivity)){
+            performSearch(v);
+        }
+
+        else{
+            new ConnectionAlertDialog(parentActivity,positiveEvent,negativeEvent);
+        }
+    }
+
+    private void performSearch(View v){
+        TextView departTime  = (TextView) v.findViewById(R.id.routeListTimeStation1);
+        String time = departTime.getText().toString();
+        String vehicleId = vehicleIdMap.get(time);
+        parentActivity.initializeDetailFragment(vehicleId,getResources().getConfiguration().orientation);
     }
 }

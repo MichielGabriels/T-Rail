@@ -27,15 +27,16 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
         public TextView txtPlatform2;
         //public TextView txtDelay1;
 
+        //TODO remove all station2 items and add delay1 to adapter
         public RouteDetailViewHolder(View view) {
             super(view);
 
             txtStation1 = (TextView) view.findViewById(R.id.textViewFrom);
-            txtStation2 = (TextView) view.findViewById(R.id.textViewStation2);
+            //txtStation2 = (TextView) view.findViewById(R.id.textViewStation2);
             txtTime1 = (TextView) view.findViewById(R.id.routeListTimeStation1);
-            txtTime2 = (TextView) view.findViewById(R.id.routeListTimeStation2);
+            ///txtTime2 = (TextView) view.findViewById(R.id.routeListTimeStation2);
             txtPlatform1 = (TextView) view.findViewById(R.id.routeListPlatformStation1);
-            txtPlatform2 = (TextView) view.findViewById(R.id.routeListPlatformStation2);
+            //txtPlatform2 = (TextView) view.findViewById(R.id.routeListPlatformStation2);
             //txtDelay1 = (TextView)
         }
     }

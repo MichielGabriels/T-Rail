@@ -75,7 +75,7 @@ public class RouteDetail {
     }
 
     public void setPlatform1(String platform1) {
-        this.platform1 = platform1;
+        this.platform1 = "perron " + platform1;
     }
 
     public String getPlatform2() {
@@ -91,7 +91,7 @@ public class RouteDetail {
     }
 
     public void setDelay1(String delay1) {
-        this.delay1 = delay1;
+        this.delay1 = "+" + delay1;
     }
 
     public String getDelay2() {

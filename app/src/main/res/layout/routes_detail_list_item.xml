@@ -17,23 +17,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/routeListTimeStation2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginBottom="8dp"
-        android:text="15:30"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/textViewStation2"
-        app:layout_constraintTop_toBottomOf="@+id/routeListTimeStation1"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
         android:id="@+id/routeListPlatformStation1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,20 +26,6 @@
         android:textSize="15dp"
         app:layout_constraintStart_toEndOf="@+id/routeListTimeStation1"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewStation2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="8dp"
-        android:text="Diest:"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFrom"
-        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/routeListTimeStation1"
@@ -71,18 +40,5 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/textViewFrom"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/routeListPlatformStation2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="8dp"
-        android:text="1"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/routeListTimeStation2"
-        app:layout_constraintTop_toBottomOf="@+id/routeListPlatformStation1" />
 
 </android.support.constraint.ConstraintLayout>
