@@ -21,6 +21,7 @@ import java.util.List;
 import be.pxl.student.t_rail.adapters.FavouritesAdapter;
 import be.pxl.student.t_rail.domainClasses.ClickEvent;
 import be.pxl.student.t_rail.domainClasses.ConnectionAlertDialog;
+import be.pxl.student.t_rail.domainClasses.Favourite;
 import be.pxl.student.t_rail.services.ConnectionService;
 import be.pxl.student.t_rail.domainClasses.StationCollection;
 import be.pxl.student.t_rail.tasks.RoutePlannerHttpTask;
@@ -31,7 +32,7 @@ public class RoutePlanActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List<String> mDummyDataSetFavourites;
+    private List<Favourite> mFavouritesList;
 
     private AutoCompleteTextView textViewDepartureStation;
     private AutoCompleteTextView textViewArrivalStation;
@@ -44,9 +45,9 @@ public class RoutePlanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
 
-        //init test data
-        mDummyDataSetFavourites = new ArrayList<>();
-        initTestComponents(mDummyDataSetFavourites);
+        //init favourites data
+        mFavouritesList = new ArrayList<>();
+        initFavourites(mFavouritesList);
 
         initViewComponents();
     }
@@ -65,19 +66,8 @@ public class RoutePlanActivity extends AppCompatActivity {
         return true;
     }
 
-    private void initTestComponents(List<String> dummyFavorites){
-        dummyFavorites.add("Hasselt --> Aarschot");
-        dummyFavorites.add("Aarschot --> Hasselt");
-        dummyFavorites.add("Hasselt --> Kiewit");
-        dummyFavorites.add("Kiewit --> Hasselt");
-        dummyFavorites.add("Hasselt --> Aarschot");
-        dummyFavorites.add("Aarschot --> Hasselt");
-        dummyFavorites.add("Hasselt --> Kiewit");
-        dummyFavorites.add("Kiewit --> Hasselt");
-        dummyFavorites.add("Hasselt --> Aarschot");
-        dummyFavorites.add("Aarschot --> Hasselt");
-        dummyFavorites.add("Hasselt --> Kiewit");
-        dummyFavorites.add("Kiewit --> Hasselt");
+    private void initFavourites(List<Favourite> favourites){
+        
     }
 
     private String formatTime(String time){
@@ -179,7 +169,7 @@ public class RoutePlanActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FavouritesAdapter(mDummyDataSetFavourites);
+        mAdapter = new FavouritesAdapter(mFavouritesList);
         mRecyclerViewFavourites.setAdapter(mAdapter);
 
 
