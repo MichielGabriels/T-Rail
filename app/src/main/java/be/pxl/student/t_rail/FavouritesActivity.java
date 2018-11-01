@@ -1,6 +1,6 @@
 package be.pxl.student.t_rail;
 
-import android.support.annotation.NonNull;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Logger;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -66,6 +67,14 @@ public class FavouritesActivity extends AppCompatActivity {
 
         Button saveButton = (Button) findViewById(R.id.buttonSave);
         saveButton.setOnClickListener(btnSaveFavouritesClick);
+
+        // Delete a favourite route
+        ClickEvent btnDeleteFavouritesClick = new ClickEvent((view) -> {
+            this.deleteFavourite();
+        });
+
+        Button deleteButton = (Button) findViewById(R.id.buttonDelete);
+        deleteButton.setOnClickListener(btnDeleteFavouritesClick);
     }
 
     @Override
@@ -92,7 +101,7 @@ public class FavouritesActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getParent(), "Oeps! Er is iets misgelopen!", Toast.LENGTH_LONG).show();
+                Toast.makeText(FavouritesActivity.this, "Oeps! Er is iets misgelopen!", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -115,6 +124,46 @@ public class FavouritesActivity extends AppCompatActivity {
 
             mTextViewFrom.setText("");
             mTextViewTo.setText("");
+        } else {
+            Toast.makeText(this, "Geen of ongeldige stations!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void deleteFavourite() {
+        String fromStation = mTextViewFrom.getText().toString().trim();
+        String toStation = mTextViewTo.getText().toString().trim();
+
+        if (this.validateStations(fromStation, toStation)) {
+
+            mDatabaseFavourites.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    mFavouriteList.clear();
+
+                    for (DataSnapshot favouriteSnapshot : dataSnapshot.getChildren()) {
+                        Favourite favourite = favouriteSnapshot.getValue(Favourite.class);
+                        if (favourite.getFromStation().equals(fromStation) && favourite.getToStation().equals(toStation)) {
+
+                            favouriteSnapshot.getRef().setValue(null);
+
+                            Toast.makeText(FavouritesActivity.this, "Favoriet verwijderd!", Toast.LENGTH_LONG).show();
+
+                            mTextViewFrom.setText("");
+                            mTextViewTo.setText("");
+
+                            return;
+                        }
+                    }
+
+                    Toast.makeText(FavouritesActivity.this, "Favoriet niet gevonden!", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(FavouritesActivity.this, "Oeps! Er is iets misgelopen!", Toast.LENGTH_LONG).show();
+                }
+            });
         } else {
             Toast.makeText(this, "Geen of ongeldige stations!", Toast.LENGTH_LONG).show();
         }
