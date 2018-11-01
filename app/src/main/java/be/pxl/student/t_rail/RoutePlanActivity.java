@@ -1,17 +1,16 @@
 package be.pxl.student.t_rail;
 
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -43,8 +42,8 @@ public class RoutePlanActivity extends AppCompatActivity {
 
     private List<Favourite> mFavouriteList;
 
-    private AutoCompleteTextView textViewDepartureStation;
-    private AutoCompleteTextView textViewArrivalStation;
+    private AutoCompleteTextView textViewFrom;
+    private AutoCompleteTextView textViewTo;
 
     private EditText mEditTextTime;
     private EditText mEditTextDate;
@@ -64,13 +63,13 @@ public class RoutePlanActivity extends AppCompatActivity {
     }
 
     private boolean checkInputFields(){
-        if(textViewDepartureStation.getText().toString().trim().equals("") && textViewArrivalStation.getText().toString().trim().equals("")){
+        if(textViewFrom.getText().toString().trim().equals("") && textViewTo.getText().toString().trim().equals("")){
             return false;
         }
 
         ArrayList<String> stations = StationCollection.getStations();
 
-        if (!stations.contains(textViewDepartureStation.getText().toString()) || !stations.contains(textViewArrivalStation.getText().toString())) {
+        if (!stations.contains(textViewFrom.getText().toString()) || !stations.contains(textViewTo.getText().toString())) {
             return false;
         }
 
@@ -180,7 +179,7 @@ public class RoutePlanActivity extends AppCompatActivity {
                 return;
             }
             RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, true, RouteMasterDetailActivity.class);
-            String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewDepartureStation.getText(), textViewArrivalStation.getText(), time, date);
+            String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewFrom.getText(), textViewTo.getText(), time, date);
             task.execute(url,date);
         } else {
             Toast.makeText(this,"Geen of ongeldig(e) station(s)!",Toast.LENGTH_LONG).show();
@@ -188,15 +187,20 @@ public class RoutePlanActivity extends AppCompatActivity {
     }
 
     private void insertFavourites(View view) {
-        // TODO: Insert from and to station in textviews
+        TextView textViewListItem = (TextView) findViewById(R.id.textViewListItem);
+
+        String[] favouriteRouteStations = textViewListItem.getText().toString().trim().split("-->");
+
+        textViewFrom.setText(favouriteRouteStations[0]);
+        textViewTo.setText(favouriteRouteStations[1]);
     }
 
     private void initViewComponents(){
         mRecyclerViewFavourites = (RecyclerView) findViewById(R.id.recyclerViewFavourites);
 
         //init textviews
-        textViewDepartureStation = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
-        textViewArrivalStation = (AutoCompleteTextView) findViewById(R.id.textViewTo);
+        textViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
+        textViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
         AutoCompleteTextView textViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
         AutoCompleteTextView textViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
         mEditTextTime = (EditText) findViewById(R.id.editTextTime);
