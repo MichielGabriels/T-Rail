@@ -1,10 +1,13 @@
 package be.pxl.student.t_rail;
 
 import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -92,13 +95,17 @@ public class RoutePlanActivity extends AppCompatActivity {
                 mLayoutManager = new LinearLayoutManager(getParent());
                 mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
 
-                mAdapter = new FavouritesAdapter(mFavouriteList);
+                ClickEvent itemClick = new ClickEvent((view) ->{
+                    insertFavourites(view);
+                });
+
+                mAdapter = new FavouritesAdapter(mFavouriteList, itemClick);
                 mRecyclerViewFavourites.setAdapter(mAdapter);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getParent(), "Oeps! Er is iets misgelopen!", Toast.LENGTH_LONG).show();
+                Toast.makeText(RoutePlanActivity.this, "Oeps! Er is iets misgelopen!", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -180,6 +187,10 @@ public class RoutePlanActivity extends AppCompatActivity {
         }
     }
 
+    private void insertFavourites(View view) {
+        // TODO: Insert from and to station in textviews
+    }
+
     private void initViewComponents(){
         mRecyclerViewFavourites = (RecyclerView) findViewById(R.id.recyclerViewFavourites);
 
@@ -198,13 +209,6 @@ public class RoutePlanActivity extends AppCompatActivity {
 
         textViewFrom.setAdapter(textViewAdapter);
         textViewTo.setAdapter(textViewAdapter);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
-
-        mAdapter = new FavouritesAdapter(mFavouriteList);
-        mRecyclerViewFavourites.setAdapter(mAdapter);
-
 
         //TODO: implement dateTime picker
         //TODO: remove current system date and time after dateTime picker is implemented

@@ -95,7 +95,11 @@ public class FavouritesActivity extends AppCompatActivity {
                 mLayoutManager = new LinearLayoutManager(getParent());
                 mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
 
-                mAdapter = new FavouritesAdapter(mFavouriteList);
+                ClickEvent itemClick = new ClickEvent((view) ->{
+                    // Do nothing
+                });
+
+                mAdapter = new FavouritesAdapter(mFavouriteList, itemClick);
                 mRecyclerViewFavourites.setAdapter(mAdapter);
             }
 

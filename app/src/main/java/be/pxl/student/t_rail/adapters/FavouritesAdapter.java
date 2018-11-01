@@ -15,19 +15,23 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
     private List<Favourite> mFavouritesList;
 
+    private View.OnClickListener mOnClickListener;
+
     // Provide a reference to the view for each data item
     public static class FavouritesViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mTextView;
 
-        public FavouritesViewHolder(View view) {
+        public FavouritesViewHolder(View view, View.OnClickListener onClickListener) {
             super(view);
             mTextView = view.findViewById(R.id.textViewListItem);
+            view.setOnClickListener(onClickListener);
         }
     }
 
-    public FavouritesAdapter(List<Favourite> favourites) {
+    public FavouritesAdapter(List<Favourite> favourites, View.OnClickListener clickEvent) {
         mFavouritesList = favourites;
+        mOnClickListener = clickEvent;
     }
 
     // Create new views
@@ -37,7 +41,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.favourites_list_row, parent, false);
 
-        return new FavouritesViewHolder(view);
+        return new FavouritesViewHolder(view, mOnClickListener);
     }
 
     // Replace the contents of a view
