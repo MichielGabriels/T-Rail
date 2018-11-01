@@ -11,6 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,7 +38,7 @@ public class RoutePlanActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List<Favourite> mFavouritesList;
+    private List<Favourite> mFavouriteList;
 
     private AutoCompleteTextView textViewDepartureStation;
     private AutoCompleteTextView textViewArrivalStation;
@@ -40,14 +46,16 @@ public class RoutePlanActivity extends AppCompatActivity {
     private EditText mEditTextTime;
     private EditText mEditTextDate;
 
+    private DatabaseReference mDatabaseFavourites;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
 
         //init favourites data
-        mFavouritesList = new ArrayList<>();
-        initFavourites(mFavouritesList);
+        mDatabaseFavourites = FirebaseDatabase.getInstance().getReference("favourites"); // .getReference() --> get the reference of the root node of the json tree
+        mFavouriteList = new ArrayList<>();
 
         initViewComponents();
     }
@@ -66,8 +74,33 @@ public class RoutePlanActivity extends AppCompatActivity {
         return true;
     }
 
-    private void initFavourites(List<Favourite> favourites){
-        
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mDatabaseFavourites.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                mFavouriteList.clear();
+
+                for (DataSnapshot favouriteSnapshot : dataSnapshot.getChildren()) {
+                    Favourite favourite = favouriteSnapshot.getValue(Favourite.class);
+                    mFavouriteList.add(favourite);
+                }
+
+                mLayoutManager = new LinearLayoutManager(getParent());
+                mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
+
+                mAdapter = new FavouritesAdapter(mFavouriteList);
+                mRecyclerViewFavourites.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getParent(), "Oeps! Er is iets misgelopen!", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private String formatTime(String time){
@@ -169,7 +202,7 @@ public class RoutePlanActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FavouritesAdapter(mFavouritesList);
+        mAdapter = new FavouritesAdapter(mFavouriteList);
         mRecyclerViewFavourites.setAdapter(mAdapter);
 
 
