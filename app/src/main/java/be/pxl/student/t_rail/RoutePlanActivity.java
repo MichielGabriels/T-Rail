@@ -139,9 +139,9 @@ public class RoutePlanActivity extends AppCompatActivity {
             if (date.equals("")) {
                 return;
             }
-            RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, "Routes ophalen", true, RouteMasterDetailActivity.class);
+            RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, true, RouteMasterDetailActivity.class);
             String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewDepartureStation.getText(), textViewArrivalStation.getText(), time, date);
-            task.execute(url);
+            task.execute(url,date);
         } else {
             Toast.makeText(this,"Geen of ongeldig(e) station(s)!",Toast.LENGTH_LONG).show();
         }

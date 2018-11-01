@@ -18,7 +18,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.604"
         app:layout_constraintStart_toEndOf="@+id/linearLayoutLabels"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
@@ -67,13 +67,11 @@
         android:id="@+id/linearLayoutLabels"
         android:layout_width="110dp"
         android:layout_height="495dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="6dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayoutStationChoice"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
@@ -84,8 +82,8 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:textSize="20dp"
-            android:text="Van:" />
+            android:text="Van:"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/textView2"
@@ -93,8 +91,8 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:textSize="20dp"
-            android:text="Naar:" />
+            android:text="Naar:"
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/editTextTime"

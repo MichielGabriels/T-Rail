@@ -7,43 +7,44 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import be.pxl.student.t_rail.domainClasses.RouteDialog;
+import be.pxl.student.t_rail.domainClasses.RoutePlanResponseModel;
 import be.pxl.student.t_rail.services.ApiService;
 
-public class RoutePlannerHttpTask extends AsyncTask<String,String,String> {
+public class RoutePlannerHttpTask extends AsyncTask<String,String,RoutePlanResponseModel> {
 
     private Context _context;
-    private ProgressDialog dialog;
+    private RouteDialog dialog;
     private ApiService _service;
     private boolean _navigateAfter;
     private Class _nextActivity;
 
-    public RoutePlannerHttpTask(Context context, String dialogTitle){
+    public RoutePlannerHttpTask(Context context){
         _context = context;
-        dialog = new ProgressDialog(_context);
-        dialog.setTitle(dialogTitle);
+        dialog = new RouteDialog(_context);
         _service = new ApiService();
     }
 
-    public RoutePlannerHttpTask(Context context, String dialogTitle, boolean navigateAfter, Class nextActivity){
-        this(context,dialogTitle);
+    public RoutePlannerHttpTask(Context context, boolean navigateAfter, Class nextActivity){
+        this(context);
         _navigateAfter = navigateAfter;
         _nextActivity = nextActivity;
     }
 
     @Override
     protected void onPreExecute() {
-        dialog.setCancelable(false);
-        dialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
         dialog.show();
     }
 
     @Override
-    protected String doInBackground(String... strings){
+    protected RoutePlanResponseModel doInBackground(String... strings){
         String url = strings[0];
-        String content = "";
+        String date = strings[1];
+        RoutePlanResponseModel content = new RoutePlanResponseModel();
+        content.setDate(date);
         synchronized (this){
             try{
-                content = _service.doGetRequest(url);
+                content.setResponse(_service.doGetRequest(url));
             }
 
             catch (IOException ex){
@@ -55,14 +56,15 @@ public class RoutePlannerHttpTask extends AsyncTask<String,String,String> {
     }
 
     @Override
-    protected void onPostExecute(String content) {
+    protected void onPostExecute(RoutePlanResponseModel content) {
         if(_navigateAfter){
             if(_nextActivity != null){
                 Intent intent = new Intent(_context,_nextActivity);
-                intent.putExtra("connections",content);
+                intent.putExtra("connections",content.getResponse());
+                intent.putExtra("date",content.getDate());
                 _context.startActivity(intent);
             }
         }
-        dialog.hide();
+        dialog.close();
     }
 }

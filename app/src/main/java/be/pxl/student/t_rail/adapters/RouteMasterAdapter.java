@@ -14,6 +14,7 @@ import be.pxl.student.t_rail.domainClasses.Route;
 public class RouteMasterAdapter extends RecyclerView.Adapter<RouteMasterAdapter.RouteMasterViewHolder> {
 
     private List<Route> mRoutes;
+    private View.OnClickListener clickListener;
 
     public static class RouteMasterViewHolder extends RecyclerView.ViewHolder{
 
@@ -24,27 +25,28 @@ public class RouteMasterAdapter extends RecyclerView.Adapter<RouteMasterAdapter.
         public TextView txtDelayDeparture;
         public TextView txtDelayArrival;
 
-        public RouteMasterViewHolder(View view){
+        public RouteMasterViewHolder(View view, View.OnClickListener clickListener){
             super(view);
             txtStationFrom = (TextView) view.findViewById(R.id.routeListStation1);
             txtStationTo = (TextView) view.findViewById(R.id.routeListStation2);
             txtTimeDeparture = (TextView) view.findViewById(R.id.routeListTimeStation1);
             txtTimeArrival = (TextView) view.findViewById(R.id.routeListTimeStation2);
-            txtDelayDeparture = (TextView) view.findViewById(R.id.routeListPlatformStation1);
+            txtDelayDeparture = (TextView) view.findViewById(R.id.routeListDelayDeparture);
             txtDelayArrival = (TextView) view.findViewById(R.id.routeListDelayArrival);
+            view.setOnClickListener(clickListener);
         }
 
     }
 
-    public RouteMasterAdapter(List<Route> routes){
+    public RouteMasterAdapter(List<Route> routes, View.OnClickListener clickEvent){
         mRoutes = routes;
+        clickListener = clickEvent;
     }
-
 
     @Override
     public RouteMasterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.routes_master_list_item,viewGroup,false);
-        return new RouteMasterViewHolder(view);
+        return new RouteMasterViewHolder(view,clickListener);
     }
 
     @Override

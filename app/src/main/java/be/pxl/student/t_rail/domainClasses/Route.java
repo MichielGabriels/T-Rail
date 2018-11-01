@@ -7,6 +7,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import be.pxl.student.t_rail.services.TimeService;
+
 public class Route {
 
     private String stationDeparture;
@@ -40,8 +42,8 @@ public class Route {
 
             setStationDeparture(departureObject.getString("station"));
             setStationArrival(arrivalObject.getString("station"));
-            setTimeDeparture(extractTimeFromJsonObject(departureObject.getString("time")));
-            setTimeArrival(extractTimeFromJsonObject(arrivalObject.getString("time")));
+            setTimeDeparture(TimeService.extractTimeFromJsonObject(departureObject.getString("time")));
+            setTimeArrival(TimeService.extractTimeFromJsonObject(arrivalObject.getString("time")));
             setDelayDeparture(departureObject.getString("delay"));
             setDelayArrival(arrivalObject.getString("delay"));
             setPlatformDeparture(departureObject.getInt("platform"));
@@ -91,11 +93,11 @@ public class Route {
     }
 
     public void setDelayArrival(String delayArrival) {
-        this.delayArrival = "+" + convertDelayFromSecondsToMinutes(delayArrival);
+        this.delayArrival = "+" + TimeService.convertDelayFromSecondsToMinutes(delayArrival);
     }
 
     public void setDelayDeparture(String delayDeparture) {
-        this.delayDeparture = "+" + convertDelayFromSecondsToMinutes(delayDeparture);
+        this.delayDeparture = "+" + TimeService.convertDelayFromSecondsToMinutes(delayDeparture);
     }
 
     public void setStationDeparture(String stationDeparture) {
@@ -126,14 +128,4 @@ public class Route {
         return vehicle;
     }
 
-    private String extractTimeFromJsonObject(String unixTime){
-       long unixTimeHolder = Long.valueOf(unixTime);
-       Date dateTime = new Date(unixTimeHolder * 1000);
-       DateFormat formatter = new SimpleDateFormat("HH:mm");
-       return formatter.format(dateTime);
-    }
-
-    private String convertDelayFromSecondsToMinutes(String seconds){
-       return String.valueOf(Integer.valueOf(seconds)/60);
-    }
 }
