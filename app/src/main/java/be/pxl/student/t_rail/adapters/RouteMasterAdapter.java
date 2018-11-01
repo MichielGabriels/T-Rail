@@ -31,7 +31,7 @@ public class RouteMasterAdapter extends RecyclerView.Adapter<RouteMasterAdapter.
             txtStationTo = (TextView) view.findViewById(R.id.routeListStation2);
             txtTimeDeparture = (TextView) view.findViewById(R.id.routeListTimeStation1);
             txtTimeArrival = (TextView) view.findViewById(R.id.routeListTimeStation2);
-            txtDelayDeparture = (TextView) view.findViewById(R.id.routeListPlatformStation1);
+            txtDelayDeparture = (TextView) view.findViewById(R.id.routeListDelayDeparture);
             txtDelayArrival = (TextView) view.findViewById(R.id.routeListDelayArrival);
             view.setOnClickListener(clickListener);
         }

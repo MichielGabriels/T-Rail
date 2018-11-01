@@ -29,6 +29,7 @@ import be.pxl.student.t_rail.services.ConnectionService;
 public class RouteMasterFragment extends Fragment {
 
     private String mConnectionJsonString;
+    private String mDate;
     private HashMap<String,String> vehicleIdMap;
     private RouteMasterDetailActivity parentActivity;
 
@@ -51,12 +52,14 @@ public class RouteMasterFragment extends Fragment {
         //orientation changed
         if(savedInstanceState != null){
             mConnectionJsonString = savedInstanceState.getString("connections");
+            mDate = savedInstanceState.getString("date");
             convertStringToVehicleIdMap(savedInstanceState.getString("vehicleIdMap"));
         }
 
         //first time fragment created
         else if(dataBundle != null){
             mConnectionJsonString = dataBundle.getString("connections");
+            mDate = dataBundle.getString("date");
         }
 
         if(mConnectionJsonString != null){
@@ -77,6 +80,7 @@ public class RouteMasterFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putString("connections", mConnectionJsonString);
         outState.putString("vehicleIdMap",convertVehicleIdMapToString());
+        outState.putString("date",mDate);
     }
 
     private ArrayList<Route> extractRoutesFromJsonArray(JSONArray jsonData){
@@ -157,6 +161,6 @@ public class RouteMasterFragment extends Fragment {
         TextView departTime  = (TextView) v.findViewById(R.id.routeListTimeStation1);
         String time = departTime.getText().toString();
         String vehicleId = vehicleIdMap.get(time);
-        parentActivity.initializeDetailFragment(vehicleId,getResources().getConfiguration().orientation);
+        parentActivity.initializeDetailFragment(vehicleId,getResources().getConfiguration().orientation,mDate);
     }
 }

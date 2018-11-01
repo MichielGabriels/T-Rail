@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import be.pxl.student.t_rail.R;
@@ -35,7 +33,7 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
             //txtStation2 = (TextView) view.findViewById(R.id.textViewStation2);
             txtTime1 = (TextView) view.findViewById(R.id.routeListTimeStation1);
             ///txtTime2 = (TextView) view.findViewById(R.id.routeListTimeStation2);
-            txtPlatform1 = (TextView) view.findViewById(R.id.routeListPlatformStation1);
+            txtPlatform1 = (TextView) view.findViewById(R.id.routeListDelayDeparture);
             //txtPlatform2 = (TextView) view.findViewById(R.id.routeListPlatformStation2);
             //txtDelay1 = (TextView)
         }

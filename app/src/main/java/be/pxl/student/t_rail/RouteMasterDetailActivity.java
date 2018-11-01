@@ -15,9 +15,11 @@ public class RouteMasterDetailActivity extends FragmentActivity {
         setContentView(R.layout.activity_route_master);
 
         String connections = getIntent().getStringExtra("connections");
+        String date = getIntent().getStringExtra("date");
 
         Bundle dataBundle = new Bundle();
         dataBundle.putString("connections",connections);
+        dataBundle.putString("date",date);
         initializeMasterFragement(dataBundle);
     }
 
@@ -29,7 +31,7 @@ public class RouteMasterDetailActivity extends FragmentActivity {
         transaction.commit();
     }
 
-    public void initializeDetailFragment(String vehicleId,int orientation){
-        new RouteDetailHttpTask(this,this,orientation).execute(vehicleId);
+    public void initializeDetailFragment(String vehicleId,int orientation,String date){
+        new RouteDetailHttpTask(this,this,orientation).execute(vehicleId,date);
     }
 }

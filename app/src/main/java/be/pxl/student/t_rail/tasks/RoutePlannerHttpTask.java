@@ -8,9 +8,10 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import be.pxl.student.t_rail.domainClasses.RouteDialog;
+import be.pxl.student.t_rail.domainClasses.RoutePlanResponseModel;
 import be.pxl.student.t_rail.services.ApiService;
 
-public class RoutePlannerHttpTask extends AsyncTask<String,String,String> {
+public class RoutePlannerHttpTask extends AsyncTask<String,String,RoutePlanResponseModel> {
 
     private Context _context;
     private RouteDialog dialog;
@@ -36,12 +37,14 @@ public class RoutePlannerHttpTask extends AsyncTask<String,String,String> {
     }
 
     @Override
-    protected String doInBackground(String... strings){
+    protected RoutePlanResponseModel doInBackground(String... strings){
         String url = strings[0];
-        String content = "";
+        String date = strings[1];
+        RoutePlanResponseModel content = new RoutePlanResponseModel();
+        content.setDate(date);
         synchronized (this){
             try{
-                content = _service.doGetRequest(url);
+                content.setResponse(_service.doGetRequest(url));
             }
 
             catch (IOException ex){
@@ -53,11 +56,12 @@ public class RoutePlannerHttpTask extends AsyncTask<String,String,String> {
     }
 
     @Override
-    protected void onPostExecute(String content) {
+    protected void onPostExecute(RoutePlanResponseModel content) {
         if(_navigateAfter){
             if(_nextActivity != null){
                 Intent intent = new Intent(_context,_nextActivity);
-                intent.putExtra("connections",content);
+                intent.putExtra("connections",content.getResponse());
+                intent.putExtra("date",content.getDate());
                 _context.startActivity(intent);
             }
         }

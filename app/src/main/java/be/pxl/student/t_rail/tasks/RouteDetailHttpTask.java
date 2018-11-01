@@ -38,8 +38,9 @@ public class RouteDetailHttpTask extends AsyncTask<String,String,String> {
     @Override
     protected String doInBackground(String... content) {
         String vehicleId = content[0];
+        String date = content[1];
         String result = "";
-        String url = String.format("vehicle/?id=%s&format=json&lang=nl",vehicleId);
+        String url = String.format("vehicle/?id=%s&date=%s&format=json&lang=nl",vehicleId,date);
         synchronized (this){
             try{
                 result = service.doGetRequest(url);
