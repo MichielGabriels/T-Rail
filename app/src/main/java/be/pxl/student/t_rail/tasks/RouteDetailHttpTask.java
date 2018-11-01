@@ -13,10 +13,12 @@ import java.io.IOException;
 import be.pxl.student.t_rail.R;
 import be.pxl.student.t_rail.RouteDetailFragment;
 import be.pxl.student.t_rail.domainClasses.ApiClient;
+import be.pxl.student.t_rail.domainClasses.Route;
+import be.pxl.student.t_rail.domainClasses.RouteDetailResponseModel;
 import be.pxl.student.t_rail.domainClasses.RouteDialog;
 import be.pxl.student.t_rail.services.ApiService;
 
-public class RouteDetailHttpTask extends AsyncTask<String,String,String> {
+public class RouteDetailHttpTask extends AsyncTask<Route,String,RouteDetailResponseModel> {
 
     private RouteDialog dialog;
     private ApiService service;
@@ -36,14 +38,14 @@ public class RouteDetailHttpTask extends AsyncTask<String,String,String> {
     }
 
     @Override
-    protected String doInBackground(String... content) {
-        String vehicleId = content[0];
-        String date = content[1];
-        String result = "";
-        String url = String.format("vehicle/?id=%s&date=%s&format=json&lang=nl",vehicleId,date);
+    protected RouteDetailResponseModel doInBackground(Route... routes) {
+        Route selectedRoute = routes[0];
+        RouteDetailResponseModel responseModel = new RouteDetailResponseModel();
+        responseModel.setSelectedRoute(selectedRoute);
+        String url = String.format("vehicle/?id=%s&date=%s&format=json&lang=nl",selectedRoute.getVehicle().getVehicleId(),selectedRoute.getDate());
         synchronized (this){
             try{
-                result = service.doGetRequest(url);
+                responseModel.setResponse(service.doGetRequest(url));
             }
 
             catch (IOException ex){
@@ -51,16 +53,20 @@ public class RouteDetailHttpTask extends AsyncTask<String,String,String> {
             }
         }
 
-        return result;
+        return responseModel;
     }
 
     @Override
-    protected void onPostExecute(String response) {
+    protected void onPostExecute(RouteDetailResponseModel result) {
        dialog.close();
         RouteDetailFragment detailFragment = new RouteDetailFragment();
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         Bundle dataBundle = new Bundle();
-        dataBundle.putString("routeDetails",response);
+        dataBundle.putString("routeDetails",result.getResponse());
+        dataBundle.putSerializable("selectedRoute",result.getSelectedRoute());
+        /*dataBundle.putString("time",result.getTime());
+        dataBundle.putString("departureStation",result.getDepartureStation());*/
+
         detailFragment.setArguments(dataBundle);
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){
             transaction.replace(R.id.fragmentDetailHolder,detailFragment);

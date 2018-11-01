@@ -1,13 +1,19 @@
 package be.pxl.student.t_rail;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +27,8 @@ import be.pxl.student.t_rail.domainClasses.Route;
 import be.pxl.student.t_rail.domainClasses.RouteDetail;
 
 public class RouteDetailFragment extends Fragment {
+
+    private Route mSelectedRoute;
 
     public RouteDetailFragment() {
 
@@ -38,6 +46,7 @@ public class RouteDetailFragment extends Fragment {
 
         if(dataBundle != null){
             String routeDetails = dataBundle.getString("routeDetails");
+            mSelectedRoute = (Route) dataBundle.getSerializable("selectedRoute");
             try{
                 JSONObject jsonObject = new JSONObject(routeDetails);
                 JSONArray stops = jsonObject.getJSONObject("stops").getJSONArray("stop");
@@ -64,4 +73,18 @@ public class RouteDetailFragment extends Fragment {
         }
         return details;
     }
+
+    /*@Override
+    public void onPause() {
+        super.onPause();
+        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new NotificationCompat.Builder(getContext(),"CHANNEL_ID")
+                .setSmallIcon(R.drawable.t_rail_logo)
+                .setContentTitle("Running")
+                .setContentText("App is still running in background")
+                .setDefaults(Notification.DEFAULT_ALL)
+                .build();
+        notificationManager.notify(0,notification);
+
+    }*/
 }

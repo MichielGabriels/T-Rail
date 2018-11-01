@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
+import be.pxl.student.t_rail.domainClasses.Route;
 import be.pxl.student.t_rail.tasks.RouteDetailHttpTask;
 
 public class RouteMasterDetailActivity extends FragmentActivity {
@@ -31,7 +32,7 @@ public class RouteMasterDetailActivity extends FragmentActivity {
         transaction.commit();
     }
 
-    public void initializeDetailFragment(String vehicleId,int orientation,String date){
-        new RouteDetailHttpTask(this,this,orientation).execute(vehicleId,date);
+    public void initializeDetailFragment(Route selectedRoute, int orientation){
+        new RouteDetailHttpTask(this,this,orientation).execute(selectedRoute);
     }
 }

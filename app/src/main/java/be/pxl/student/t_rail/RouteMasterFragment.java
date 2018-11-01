@@ -15,6 +15,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -158,9 +159,29 @@ public class RouteMasterFragment extends Fragment {
     }
 
     private void performSearch(View v){
-        TextView departTime  = (TextView) v.findViewById(R.id.routeListTimeStation1);
+        /*TextView departTime  = (TextView) v.findViewById(R.id.routeListTimeStation1);
+        TextView departStation = (TextView) v.findViewById(R.id.routeListStation1);
         String time = departTime.getText().toString();
-        String vehicleId = vehicleIdMap.get(time);
-        parentActivity.initializeDetailFragment(vehicleId,getResources().getConfiguration().orientation,mDate);
+        String departStationText = departStation.getText().toString();
+        String vehicleId = vehicleIdMap.get(time);*/
+        Route selectedRoute = getRouteFromClickedView(v);
+        parentActivity.initializeDetailFragment(selectedRoute,getResources().getConfiguration().orientation);
+    }
+
+    private Route getRouteFromClickedView(View view){
+        TextView departureTime = (TextView) view.findViewById(R.id.routeListTimeStation1);
+        TextView arrivalTime = (TextView) view.findViewById(R.id.routeListTimeStation2);
+        TextView departureStation = (TextView) view.findViewById(R.id.routeListStation1);
+        TextView arrivalStation = (TextView) view.findViewById(R.id.routeListStation2);
+        TextView departureDelay = (TextView) view.findViewById(R.id.routeListDelayDeparture);
+        TextView arrivalDelay = (TextView) view.findViewById(R.id.routeListDelayArrival);
+
+        Route selectedRoute = new Route(departureStation.getText().toString(),arrivalStation.getText().toString(),departureTime.getText().toString()
+                                        ,arrivalTime.getText().toString(),departureDelay.getText().toString(),arrivalDelay.getText().toString(),
+                        0,0,vehicleIdMap.get(departureTime.getText().toString()));
+        if(mDate != null && mDate != ""){
+            selectedRoute.setDate(mDate);
+        }
+        return selectedRoute;
     }
 }

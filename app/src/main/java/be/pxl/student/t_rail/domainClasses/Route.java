@@ -3,13 +3,14 @@ package be.pxl.student.t_rail.domainClasses;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import be.pxl.student.t_rail.services.TimeService;
 
-public class Route {
+public class Route implements Serializable {
 
     private String stationDeparture;
     private String stationArrival;
@@ -20,6 +21,7 @@ public class Route {
     private int platformDeparture;
     private int platformArrival;
     private Vehicle vehicle;
+    private String date;
 
 
     public Route(String stationDeparture,String stationArrival,String timeDeparture,String timeArrival
@@ -34,6 +36,7 @@ public class Route {
         setPlatformArrival(platformArrival);
         setVehicle(new Vehicle(trainId));
     }
+
 
     public Route(JSONObject jsonObject){
         try{
@@ -128,4 +131,11 @@ public class Route {
         return vehicle;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 }
