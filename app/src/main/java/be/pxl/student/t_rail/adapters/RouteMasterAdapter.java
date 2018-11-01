@@ -46,6 +46,7 @@ public class RouteMasterAdapter extends RecyclerView.Adapter<RouteMasterAdapter.
     @Override
     public RouteMasterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.routes_master_list_item,viewGroup,false);
+
         return new RouteMasterViewHolder(view,clickListener);
     }
 

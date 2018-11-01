@@ -5,11 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.Format;
 import java.text.ParseException;
@@ -21,6 +29,7 @@ import java.util.List;
 import be.pxl.student.t_rail.adapters.FavouritesAdapter;
 import be.pxl.student.t_rail.domainClasses.ClickEvent;
 import be.pxl.student.t_rail.domainClasses.ConnectionAlertDialog;
+import be.pxl.student.t_rail.domainClasses.Favourite;
 import be.pxl.student.t_rail.services.ConnectionService;
 import be.pxl.student.t_rail.domainClasses.StationCollection;
 import be.pxl.student.t_rail.tasks.RoutePlannerHttpTask;
@@ -31,53 +40,73 @@ public class RoutePlanActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List<String> mDummyDataSetFavourites;
+    private List<Favourite> mFavouriteList;
 
-    private AutoCompleteTextView textViewDepartureStation;
-    private AutoCompleteTextView textViewArrivalStation;
+    private AutoCompleteTextView textViewFrom;
+    private AutoCompleteTextView textViewTo;
 
     private EditText mEditTextTime;
     private EditText mEditTextDate;
+
+    private DatabaseReference mDatabaseFavourites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
 
-        //init test data
-        mDummyDataSetFavourites = new ArrayList<>();
-        initTestComponents(mDummyDataSetFavourites);
+        //init favourites data
+        mDatabaseFavourites = FirebaseDatabase.getInstance().getReference("favourites"); // .getReference() --> get the reference of the root node of the json tree
+        mFavouriteList = new ArrayList<>();
 
         initViewComponents();
     }
 
     private boolean checkInputFields(){
-        if(textViewDepartureStation.getText().toString().trim().equals("") && textViewArrivalStation.getText().toString().trim().equals("")){
+        if(textViewFrom.getText().toString().trim().equals("") && textViewTo.getText().toString().trim().equals("")){
             return false;
         }
 
         ArrayList<String> stations = StationCollection.getStations();
 
-        if (!stations.contains(textViewDepartureStation.getText().toString()) || !stations.contains(textViewArrivalStation.getText().toString())) {
+        if (!stations.contains(textViewFrom.getText().toString()) || !stations.contains(textViewTo.getText().toString())) {
             return false;
         }
 
         return true;
     }
 
-    private void initTestComponents(List<String> dummyFavorites){
-        dummyFavorites.add("Hasselt --> Aarschot");
-        dummyFavorites.add("Aarschot --> Hasselt");
-        dummyFavorites.add("Hasselt --> Kiewit");
-        dummyFavorites.add("Kiewit --> Hasselt");
-        dummyFavorites.add("Hasselt --> Aarschot");
-        dummyFavorites.add("Aarschot --> Hasselt");
-        dummyFavorites.add("Hasselt --> Kiewit");
-        dummyFavorites.add("Kiewit --> Hasselt");
-        dummyFavorites.add("Hasselt --> Aarschot");
-        dummyFavorites.add("Aarschot --> Hasselt");
-        dummyFavorites.add("Hasselt --> Kiewit");
-        dummyFavorites.add("Kiewit --> Hasselt");
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mDatabaseFavourites.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                mFavouriteList.clear();
+
+                for (DataSnapshot favouriteSnapshot : dataSnapshot.getChildren()) {
+                    Favourite favourite = favouriteSnapshot.getValue(Favourite.class);
+                    mFavouriteList.add(favourite);
+                }
+
+                mLayoutManager = new LinearLayoutManager(getParent());
+                mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
+
+                ClickEvent itemClick = new ClickEvent((view) ->{
+                    insertFavourites(view);
+                });
+
+                mAdapter = new FavouritesAdapter(mFavouriteList, itemClick);
+                mRecyclerViewFavourites.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(RoutePlanActivity.this, "Oeps! Er is iets misgelopen!", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private String formatTime(String time){
@@ -150,19 +179,28 @@ public class RoutePlanActivity extends AppCompatActivity {
                 return;
             }
             RoutePlannerHttpTask task = new RoutePlannerHttpTask(RoutePlanActivity.this, true, RouteMasterDetailActivity.class);
-            String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewDepartureStation.getText(), textViewArrivalStation.getText(), time, date);
+            String url = String.format("connections/?from=%s&to=%s&format=json&lang=nl&time=%s&date=%s", textViewFrom.getText(), textViewTo.getText(), time, date);
             task.execute(url,date);
         } else {
             Toast.makeText(this,"Geen of ongeldig(e) station(s)!",Toast.LENGTH_LONG).show();
         }
     }
 
+    private void insertFavourites(View view) {
+        TextView textViewListItem = (TextView) findViewById(R.id.textViewListItem);
+
+        String[] favouriteRouteStations = textViewListItem.getText().toString().trim().split("-->");
+
+        textViewFrom.setText(favouriteRouteStations[0]);
+        textViewTo.setText(favouriteRouteStations[1]);
+    }
+
     private void initViewComponents(){
         mRecyclerViewFavourites = (RecyclerView) findViewById(R.id.recyclerViewFavourites);
 
         //init textviews
-        textViewDepartureStation = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
-        textViewArrivalStation = (AutoCompleteTextView) findViewById(R.id.textViewTo);
+        textViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
+        textViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
         AutoCompleteTextView textViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
         AutoCompleteTextView textViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
         mEditTextTime = (EditText) findViewById(R.id.editTextTime);
@@ -175,13 +213,6 @@ public class RoutePlanActivity extends AppCompatActivity {
 
         textViewFrom.setAdapter(textViewAdapter);
         textViewTo.setAdapter(textViewAdapter);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
-
-        mAdapter = new FavouritesAdapter(mDummyDataSetFavourites);
-        mRecyclerViewFavourites.setAdapter(mAdapter);
-
 
         //TODO: implement dateTime picker
         //TODO: remove current system date and time after dateTime picker is implemented
