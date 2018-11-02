@@ -27,8 +27,8 @@ import java.util.Date;
 import java.util.List;
 
 import be.pxl.student.t_rail.adapters.FavouritesAdapter;
-import be.pxl.student.t_rail.domainClasses.ClickEvent;
-import be.pxl.student.t_rail.domainClasses.ConnectionAlertDialog;
+import be.pxl.student.t_rail.events.ClickEvent;
+import be.pxl.student.t_rail.dialogs.ConnectionAlertDialog;
 import be.pxl.student.t_rail.domainClasses.Favourite;
 import be.pxl.student.t_rail.services.ConnectionService;
 import be.pxl.student.t_rail.domainClasses.StationCollection;

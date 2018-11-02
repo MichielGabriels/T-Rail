@@ -1,6 +1,5 @@
 package be.pxl.student.t_rail;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,14 +14,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Logger;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import be.pxl.student.t_rail.adapters.FavouritesAdapter;
-import be.pxl.student.t_rail.domainClasses.ClickEvent;
+import be.pxl.student.t_rail.events.ClickEvent;
 import be.pxl.student.t_rail.domainClasses.Favourite;
 import be.pxl.student.t_rail.domainClasses.StationCollection;
 

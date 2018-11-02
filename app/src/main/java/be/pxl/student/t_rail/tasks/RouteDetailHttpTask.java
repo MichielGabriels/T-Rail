@@ -1,6 +1,5 @@
 package be.pxl.student.t_rail.tasks;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -12,10 +11,9 @@ import java.io.IOException;
 
 import be.pxl.student.t_rail.R;
 import be.pxl.student.t_rail.RouteDetailFragment;
-import be.pxl.student.t_rail.domainClasses.ApiClient;
 import be.pxl.student.t_rail.domainClasses.Route;
-import be.pxl.student.t_rail.domainClasses.RouteDetailResponseModel;
-import be.pxl.student.t_rail.domainClasses.RouteDialog;
+import be.pxl.student.t_rail.models.RouteDetailResponseModel;
+import be.pxl.student.t_rail.dialogs.RouteDialog;
 import be.pxl.student.t_rail.services.ApiService;
 
 public class RouteDetailHttpTask extends AsyncTask<Route,String,RouteDetailResponseModel> {

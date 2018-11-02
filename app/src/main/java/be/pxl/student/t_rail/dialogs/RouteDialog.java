@@ -1,4 +1,4 @@
-package be.pxl.student.t_rail.domainClasses;
+package be.pxl.student.t_rail.dialogs;
 
 import android.app.ProgressDialog;
 import android.content.Context;

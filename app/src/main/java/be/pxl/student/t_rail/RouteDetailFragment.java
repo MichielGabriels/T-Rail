@@ -1,13 +1,8 @@
 package be.pxl.student.t_rail;
 
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.pxl.student.t_rail.adapters.RouteDetailAdapter;
-import be.pxl.student.t_rail.domainClasses.DialogClickEvent;
-import be.pxl.student.t_rail.domainClasses.LongClickEvent;
+import be.pxl.student.t_rail.dialogs.OptionsDialog;
+import be.pxl.student.t_rail.events.DialogClickEvent;
+import be.pxl.student.t_rail.events.LongClickEvent;
 import be.pxl.student.t_rail.domainClasses.Route;
 import be.pxl.student.t_rail.domainClasses.RouteDetail;
 
@@ -77,15 +72,13 @@ public class RouteDetailFragment extends Fragment {
     //TODO: add notification service to dialogClickevent
     private void initializeRecyclerView(View view,List<RouteDetail> details){
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteDetails);
+        DialogClickEvent dialogClickEvent = new DialogClickEvent((dialog,which) ->{
+            Toast.makeText(getContext(),String.format("%s->%s",mSelectedRoute.getStationDeparture(),mSelectedRoute.getStationArrival()),Toast.LENGTH_SHORT).show();
+        });
+        String[] dialogValues = new String[]{"Volg route"};
         LongClickEvent longClickEvent = new LongClickEvent((v) ->{
-            String[] values = new String[]  {"Volg route"};
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-            dialogBuilder.setTitle("Opties");
-            DialogClickEvent clickEvent = new DialogClickEvent((dialog,which) ->{
-                Toast.makeText(getContext(),String.format("%s->%s",mSelectedRoute.getStationDeparture(),mSelectedRoute.getStationArrival()),Toast.LENGTH_SHORT).show();
-            });
-            dialogBuilder.setItems(values,clickEvent);
-            dialogBuilder.create().show();
+            OptionsDialog dialog = new OptionsDialog(getActivity(),dialogValues,dialogClickEvent);
+            dialog.show();
         });
 
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));

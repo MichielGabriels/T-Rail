@@ -1,9 +1,8 @@
-package be.pxl.student.t_rail.domainClasses;
+package be.pxl.student.t_rail.events;
 
 import android.content.DialogInterface;
 
 import be.pxl.student.t_rail.interfaces.IDialogEvent;
-import be.pxl.student.t_rail.interfaces.IEvent;
 
 public class DialogClickEvent extends DialogEvent implements DialogInterface.OnClickListener {
 

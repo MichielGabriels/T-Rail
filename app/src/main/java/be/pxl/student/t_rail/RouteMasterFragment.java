@@ -15,15 +15,14 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import be.pxl.student.t_rail.adapters.RouteMasterAdapter;
-import be.pxl.student.t_rail.domainClasses.ClickEvent;
-import be.pxl.student.t_rail.domainClasses.ConnectionAlertDialog;
+import be.pxl.student.t_rail.events.ClickEvent;
+import be.pxl.student.t_rail.dialogs.ConnectionAlertDialog;
 import be.pxl.student.t_rail.domainClasses.Route;
 import be.pxl.student.t_rail.services.ConnectionService;
 

@@ -1,4 +1,6 @@
-package be.pxl.student.t_rail.domainClasses;
+package be.pxl.student.t_rail.models;
+
+import be.pxl.student.t_rail.domainClasses.Route;
 
 public class RouteDetailResponseModel {
 

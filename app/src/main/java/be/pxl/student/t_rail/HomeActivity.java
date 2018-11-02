@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 
-import be.pxl.student.t_rail.domainClasses.ClickEvent;
+import be.pxl.student.t_rail.events.ClickEvent;
 
 public class HomeActivity extends AppCompatActivity {
 

@@ -4,7 +4,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import be.pxl.student.t_rail.domainClasses.ConnectionAlertDialog;
+import be.pxl.student.t_rail.dialogs.ConnectionAlertDialog;
 import be.pxl.student.t_rail.services.ConnectionService;
 import be.pxl.student.t_rail.tasks.StationsHttpTask;
 

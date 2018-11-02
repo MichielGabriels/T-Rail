@@ -1,6 +1,5 @@
 package be.pxl.student.t_rail.adapters;
 
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import be.pxl.student.t_rail.R;
-import be.pxl.student.t_rail.domainClasses.LongClickEvent;
+import be.pxl.student.t_rail.events.LongClickEvent;
 import be.pxl.student.t_rail.domainClasses.RouteDetail;
 
 public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.RouteDetailViewHolder> {

@@ -1,14 +1,13 @@
 package be.pxl.student.t_rail.tasks;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
 import java.io.IOException;
 
-import be.pxl.student.t_rail.domainClasses.RouteDialog;
-import be.pxl.student.t_rail.domainClasses.RoutePlanResponseModel;
+import be.pxl.student.t_rail.dialogs.RouteDialog;
+import be.pxl.student.t_rail.models.RoutePlanResponseModel;
 import be.pxl.student.t_rail.services.ApiService;
 
 public class RoutePlannerHttpTask extends AsyncTask<String,String,RoutePlanResponseModel> {
