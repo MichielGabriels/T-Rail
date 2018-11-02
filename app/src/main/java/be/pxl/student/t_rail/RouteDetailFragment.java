@@ -1,5 +1,6 @@
 package be.pxl.student.t_rail;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import org.json.JSONArray;
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.pxl.student.t_rail.adapters.RouteDetailAdapter;
+import be.pxl.student.t_rail.domainClasses.DialogClickEvent;
+import be.pxl.student.t_rail.domainClasses.LongClickEvent;
 import be.pxl.student.t_rail.domainClasses.Route;
 import be.pxl.student.t_rail.domainClasses.RouteDetail;
 
@@ -51,11 +55,7 @@ public class RouteDetailFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(routeDetails);
                 JSONArray stops = jsonObject.getJSONObject("stops").getJSONArray("stop");
                 ArrayList<RouteDetail> details = extractRouteDetailsFromJsonArray(stops);
-                RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteDetails);
-                recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                RouteDetailAdapter adapter = new RouteDetailAdapter(details);
-                recyclerView.setAdapter(adapter);
+                initializeRecyclerView(view,details);
             }
 
             catch (JSONException ex){
@@ -72,6 +72,26 @@ public class RouteDetailFragment extends Fragment {
             details.add(new RouteDetail(currentObject));
         }
         return details;
+    }
+
+    //TODO: add notification service to dialogClickevent
+    private void initializeRecyclerView(View view,List<RouteDetail> details){
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteDetails);
+        LongClickEvent longClickEvent = new LongClickEvent((v) ->{
+            String[] values = new String[]  {"Volg route"};
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+            dialogBuilder.setTitle("Opties");
+            DialogClickEvent clickEvent = new DialogClickEvent((dialog,which) ->{
+                Toast.makeText(getContext(),String.format("%s->%s",mSelectedRoute.getStationDeparture(),mSelectedRoute.getStationArrival()),Toast.LENGTH_SHORT).show();
+            });
+            dialogBuilder.setItems(values,clickEvent);
+            dialogBuilder.create().show();
+        });
+
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        RouteDetailAdapter adapter = new RouteDetailAdapter(details,longClickEvent);
+        recyclerView.setAdapter(adapter);
     }
 
     /*@Override
