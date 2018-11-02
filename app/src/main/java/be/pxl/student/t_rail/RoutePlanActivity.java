@@ -32,6 +32,7 @@ import be.pxl.student.t_rail.dialogs.ConnectionAlertDialog;
 import be.pxl.student.t_rail.domainClasses.Favourite;
 import be.pxl.student.t_rail.services.ConnectionService;
 import be.pxl.student.t_rail.domainClasses.StationCollection;
+import be.pxl.student.t_rail.services.TimeService;
 import be.pxl.student.t_rail.tasks.RoutePlannerHttpTask;
 
 public class RoutePlanActivity extends AppCompatActivity {
@@ -58,6 +59,8 @@ public class RoutePlanActivity extends AppCompatActivity {
         //init favourites data
         mDatabaseFavourites = FirebaseDatabase.getInstance().getReference("favourites"); // .getReference() --> get the reference of the root node of the json tree
         mFavouriteList = new ArrayList<>();
+
+
 
         initViewComponents();
     }
@@ -219,8 +222,18 @@ public class RoutePlanActivity extends AppCompatActivity {
         ClickEvent searchClick = new ClickEvent((view) ->{
             performSearch();
         });
+        ClickEvent timeAndDateNowClick = new ClickEvent((view)->{
+            String timeNow = TimeService.getCurrentSystemTime(new SimpleDateFormat("HH:mm"));
+            String dateNow = TimeService.getCurrentSystemDate(new SimpleDateFormat("dd/MM/yy"));
+            mEditTextDate.setText(dateNow);
+            mEditTextTime.setText(timeNow);
+        });
 
         Button searchButton = (Button) findViewById(R.id.buttonSearch);
+        Button dateTimeNowButton = (Button) findViewById(R.id.buttonDateTimeNow);
+
         searchButton.setOnClickListener(searchClick);
+        dateTimeNowButton.setOnClickListener(timeAndDateNowClick);
     }
+
 }
