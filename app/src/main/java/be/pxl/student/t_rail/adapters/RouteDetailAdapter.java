@@ -19,24 +19,23 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
 
     public class RouteDetailViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txtStation1;
-        public TextView txtStation2;
-        public TextView txtTime1;
-        public TextView txtTime2;
-        public TextView txtPlatform1;
-        public TextView txtPlatform2;
-        //public TextView txtDelay1;
+        public TextView txtStation;
+        public TextView txtTimeArrival;
+        public TextView txtTimeDeparture;
+        public TextView txtPlatform;
+        public TextView txtDelayArrival;
+        public TextView txtDelayDeparture;
 
-        //TODO remove all station2 items and add delay1 to adapter
+        //TODO and add time2,delay1,delay2 to adapter
         public RouteDetailViewHolder(View view) {
             super(view);
-            txtStation1 = (TextView) view.findViewById(R.id.textViewFrom);
-            //txtStation2 = (TextView) view.findViewById(R.id.textViewStation2);
-            txtTime1 = (TextView) view.findViewById(R.id.routeListTimeStation1);
-            ///txtTime2 = (TextView) view.findViewById(R.id.routeListTimeStation2);
-            txtPlatform1 = (TextView) view.findViewById(R.id.routeListDelayDeparture);
-            //txtPlatform2 = (TextView) view.findViewById(R.id.routeListPlatformStation2);
-            //txtDelay1 = (TextView)
+            txtStation = (TextView) view.findViewById(R.id.textViewFrom);
+            txtTimeArrival = (TextView) view.findViewById(R.id.routeDetailTimeArrival);
+            txtTimeDeparture = (TextView) view.findViewById(R.id.routeDetailTimeDeparture);
+            txtPlatform = (TextView) view.findViewById(R.id.routeDetailPlatform);
+            txtDelayArrival = (TextView) view.findViewById(R.id.routeDetailDelayArrival);
+            txtDelayDeparture = (TextView) view.findViewById(R.id.routeListDelayDeparture);
+
             view.setOnLongClickListener(mLongClickEvent);
         }
     }
@@ -55,12 +54,11 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
     @Override
     public void onBindViewHolder(RouteDetailViewHolder routeDetailViewHolder, int selectedIndex) {
         RouteDetail routeDetail = mRouteDetails.get(selectedIndex);
-        routeDetailViewHolder.txtStation1.setText(routeDetail.getStation1());
-        //routeDetailViewHolder.txtStation2.setText(routeDetail.getStation2());
-        routeDetailViewHolder.txtTime1.setText(routeDetail.getTime1());
-        //routeDetailViewHolder.txtTime2.setText(routeDetail.getTime2());
-        routeDetailViewHolder.txtPlatform1.setText(routeDetail.getPlatform1());
-        //routeDetailViewHolder.txtPlatform2.setText(routeDetail.getPlatform2());
+        routeDetailViewHolder.txtStation.setText(routeDetail.getStation1());
+        routeDetailViewHolder.txtTimeArrival.setText(routeDetail.getTime1());
+        //routeDetailViewHolder.txtTimeDeparture.setText(routeDetail.getTime2());
+        routeDetailViewHolder.txtPlatform.setText(routeDetail.getPlatform1());
+
     }
 
     @Override
