@@ -52,6 +52,7 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
     }
 
     @Override
+    //TODO: add all members of routeDetail
     public void onBindViewHolder(RouteDetailViewHolder routeDetailViewHolder, int selectedIndex) {
         RouteDetail routeDetail = mRouteDetails.get(selectedIndex);
         routeDetailViewHolder.txtStation.setText(routeDetail.getStation1());
