@@ -1,6 +1,7 @@
 package be.pxl.student.t_rail;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,15 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import be.pxl.student.t_rail.adapters.RouteMasterAdapter;
 import be.pxl.student.t_rail.dialogs.OptionsDialog;
@@ -31,6 +23,7 @@ import be.pxl.student.t_rail.domainClasses.Route;
 import be.pxl.student.t_rail.events.DialogClickEvent;
 import be.pxl.student.t_rail.events.LongClickEvent;
 import be.pxl.student.t_rail.services.ConnectionService;
+import be.pxl.student.t_rail.services.NotificationService;
 
 public class RouteMasterFragment extends Fragment {
 
@@ -79,21 +72,26 @@ public class RouteMasterFragment extends Fragment {
     //TODO: add notification service to dialogClickEvent
     private void initializeData(View view,RouteCollection routeCollection){
         LongClickEvent itemLongClick = new LongClickEvent((v) -> {
-            Route selectedRoute = null;
+            DialogClickEvent dialogClickEvent = null;
             try{
-                selectedRoute = getRouteFromClickedView(v);
+               Route selectedRoute = getRouteFromClickedView(v);
+                dialogClickEvent = new DialogClickEvent((dialog,which) ->{
+                    Intent intent = new Intent(getContext(),NotificationService.class);
+                    intent.putExtra("route",selectedRoute);
+                    getActivity().startService(intent);
+                });
             }
 
             catch (RouteNotFoundException ex){
                 System.out.println(ex.getMessage());
             }
 
-            DialogClickEvent dialogClickEvent = new DialogClickEvent((dialog,which) ->{
-                Toast.makeText(getContext(),"notification on",Toast.LENGTH_SHORT).show();
-            });
+
             String[] dialogValues = new String[]{"Volg route"};
-            OptionsDialog dialog = new OptionsDialog(getActivity(),dialogValues,dialogClickEvent);
-            dialog.show();
+            if(dialogClickEvent != null){
+                OptionsDialog dialog = new OptionsDialog(getActivity(),dialogValues,dialogClickEvent);
+                dialog.show();
+            }
         });
         ClickEvent itemClick = new ClickEvent((v) ->{
             search(v);
@@ -154,4 +152,5 @@ public class RouteMasterFragment extends Fragment {
             throw new NullPointerException("mRoutes is null");
         }
     }
+
 }

@@ -1,6 +1,6 @@
 package be.pxl.student.t_rail;
 
-import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -9,14 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import be.pxl.student.t_rail.adapters.RouteDetailAdapter;
 import be.pxl.student.t_rail.dialogs.OptionsDialog;
@@ -24,7 +16,7 @@ import be.pxl.student.t_rail.domainClasses.RouteDetailCollection;
 import be.pxl.student.t_rail.events.DialogClickEvent;
 import be.pxl.student.t_rail.events.LongClickEvent;
 import be.pxl.student.t_rail.domainClasses.Route;
-import be.pxl.student.t_rail.domainClasses.RouteDetail;
+import be.pxl.student.t_rail.services.NotificationService;
 
 public class RouteDetailFragment extends Fragment {
 
@@ -60,7 +52,9 @@ public class RouteDetailFragment extends Fragment {
     private void initializeRecyclerView(View view,RouteDetailCollection detailsCollection){
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteDetails);
         DialogClickEvent dialogClickEvent = new DialogClickEvent((dialog,which) ->{
-            Toast.makeText(getContext(),String.format("%s->%s",mSelectedRoute.getStationDeparture(),mSelectedRoute.getStationArrival()),Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(),NotificationService.class);
+            intent.putExtra("route",mSelectedRoute);
+            getActivity().startService(intent);
         });
         String[] dialogValues = new String[]{"Volg route"};
         LongClickEvent longClickEvent = new LongClickEvent((v) ->{
@@ -73,4 +67,6 @@ public class RouteDetailFragment extends Fragment {
         RouteDetailAdapter adapter = new RouteDetailAdapter(detailsCollection.getRouteDetails(),longClickEvent);
         recyclerView.setAdapter(adapter);
     }
+
+
 }
