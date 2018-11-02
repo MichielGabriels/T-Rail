@@ -50,7 +50,7 @@ public class Route implements Serializable {
             setDelayDeparture(departureObject.getString("delay"));
             setDelayArrival(arrivalObject.getString("delay"));
             setPlatformDeparture(departureObject.getInt("platform"));
-            setPlatformArrival(departureObject.getInt("platform"));
+            setPlatformArrival(arrivalObject.getInt("platform"));
             vehicle = new Vehicle(departureObject.getString("vehicle"));
         }
 

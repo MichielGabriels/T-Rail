@@ -1,6 +1,8 @@
 package be.pxl.student.t_rail.domainClasses;
 
-public class Vehicle {
+import java.io.Serializable;
+
+public class Vehicle implements Serializable {
 
     private String vehicleId;
 

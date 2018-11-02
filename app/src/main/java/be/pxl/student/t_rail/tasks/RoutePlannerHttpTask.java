@@ -4,9 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
 
 import be.pxl.student.t_rail.dialogs.RouteDialog;
+import be.pxl.student.t_rail.domainClasses.Route;
+import be.pxl.student.t_rail.domainClasses.RouteCollection;
 import be.pxl.student.t_rail.models.RoutePlanResponseModel;
 import be.pxl.student.t_rail.services.ApiService;
 
@@ -55,12 +62,16 @@ public class RoutePlannerHttpTask extends AsyncTask<String,String,RoutePlanRespo
     }
 
     @Override
+    //TODO: convert json response to routeCollection
+    //TODO: pass routeCollection to activity as seriazable intent
     protected void onPostExecute(RoutePlanResponseModel content) {
         if(_navigateAfter){
             if(_nextActivity != null){
                 Intent intent = new Intent(_context,_nextActivity);
-                intent.putExtra("connections",content.getResponse());
-                intent.putExtra("date",content.getDate());
+                RouteCollection routes = new RouteCollection(content.getResponse(),content.getDate());
+                intent.putExtra("routes",routes);
+               //intent.putExtra("connections",content.getResponse());
+               // intent.putExtra("date",content.getDate());
                 _context.startActivity(intent);
             }
         }

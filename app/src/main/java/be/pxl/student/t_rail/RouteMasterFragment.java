@@ -23,6 +23,8 @@ import java.util.Map;
 
 import be.pxl.student.t_rail.adapters.RouteMasterAdapter;
 import be.pxl.student.t_rail.dialogs.OptionsDialog;
+import be.pxl.student.t_rail.domainClasses.RouteCollection;
+import be.pxl.student.t_rail.domainClasses.RouteNotFoundException;
 import be.pxl.student.t_rail.events.ClickEvent;
 import be.pxl.student.t_rail.dialogs.ConnectionAlertDialog;
 import be.pxl.student.t_rail.domainClasses.Route;
@@ -32,9 +34,7 @@ import be.pxl.student.t_rail.services.ConnectionService;
 
 public class RouteMasterFragment extends Fragment {
 
-    private String mConnectionJsonString;
-    private String mDate;
-    private HashMap<String,String> vehicleIdMap;
+    private RouteCollection mRoutes;
     private RouteMasterDetailActivity parentActivity;
 
     public RouteMasterFragment(){
@@ -51,29 +51,19 @@ public class RouteMasterFragment extends Fragment {
         Bundle dataBundle = getArguments();
         View view = inflater.inflate(R.layout.fragment_route_master, container, false);
         parentActivity = (RouteMasterDetailActivity) getActivity();
-        vehicleIdMap = new HashMap<>();
 
         //orientation changed
         if(savedInstanceState != null){
-            mConnectionJsonString = savedInstanceState.getString("connections");
-            mDate = savedInstanceState.getString("date");
-            convertStringToVehicleIdMap(savedInstanceState.getString("vehicleIdMap"));
+            mRoutes = (RouteCollection) savedInstanceState.getSerializable("routes");
         }
 
         //first time fragment created
         else if(dataBundle != null){
-            mConnectionJsonString = dataBundle.getString("connections");
-            mDate = dataBundle.getString("date");
+            mRoutes = (RouteCollection) dataBundle.getSerializable("routes");
         }
 
-        if(mConnectionJsonString != null){
-           try{
-               initializeData(view, mConnectionJsonString);
-           }
-
-           catch (JSONException ex){
-               System.out.println(ex.getMessage());
-           }
+        if(mRoutes != null){
+          initializeData(view,mRoutes);
         }
 
         return view;
@@ -82,37 +72,24 @@ public class RouteMasterFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("connections", mConnectionJsonString);
-        outState.putString("vehicleIdMap",convertVehicleIdMapToString());
-        outState.putString("date",mDate);
+        outState.putSerializable("routes",mRoutes);
     }
 
-    private ArrayList<Route> extractRoutesFromJsonArray(JSONArray jsonData){
-            ArrayList<Route> routes = new ArrayList<>();
-        try{
-            for(int index = 0;index < jsonData.length();index++){
-                JSONObject currentObject = jsonData.getJSONObject(index);
-                Route currentRoute = new Route(currentObject);
-                routes.add(currentRoute);
-                vehicleIdMap.put(currentRoute.getTimeDeparture(),currentRoute.getVehicle().getVehicleId());
-            }
-        }
-
-        catch (JSONException ex){
-            System.out.println(ex.getMessage());
-        }
-
-        return routes;
-    }
 
     //TODO: add notification service to dialogClickEvent
-    private void initializeData(View view,String jsonString) throws JSONException{
-        JSONArray connections = new JSONObject(jsonString).getJSONArray("connection");
-        ArrayList<Route> routes = extractRoutesFromJsonArray(connections);
+    private void initializeData(View view,RouteCollection routeCollection){
         LongClickEvent itemLongClick = new LongClickEvent((v) -> {
-            Route selectedRoute = getRouteFromClickedView(v);
+            Route selectedRoute = null;
+            try{
+                selectedRoute = getRouteFromClickedView(v);
+            }
+
+            catch (RouteNotFoundException ex){
+                System.out.println(ex.getMessage());
+            }
+
             DialogClickEvent dialogClickEvent = new DialogClickEvent((dialog,which) ->{
-                Toast.makeText(getContext(),String.format("%s->%s",selectedRoute.getTimeDeparture(),selectedRoute.getTimeArrival()),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"notification on",Toast.LENGTH_SHORT).show();
             });
             String[] dialogValues = new String[]{"Volg route"};
             OptionsDialog dialog = new OptionsDialog(getActivity(),dialogValues,dialogClickEvent);
@@ -125,25 +102,8 @@ public class RouteMasterFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteMaster);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        RouteMasterAdapter adapter = new RouteMasterAdapter(routes,itemClick,itemLongClick);
+        RouteMasterAdapter adapter = new RouteMasterAdapter(routeCollection.getRoutes(),itemClick,itemLongClick);
         recyclerView.setAdapter(adapter);
-    }
-
-    private String convertVehicleIdMapToString(){
-        String result = "";
-        for(Map.Entry<String,String> entry : vehicleIdMap.entrySet()){
-            String element = String.format("%s=>%s;",entry.getKey(),entry.getValue());
-            result += element;
-        }
-        return result;
-    }
-
-    private void convertStringToVehicleIdMap(String mapString){
-        String[] elements = mapString.split(";");
-        for(int index =0; index<elements.length;index++){
-            String[] subElements = elements[index].split("=>");
-            vehicleIdMap.put(subElements[0],subElements[1]);
-        }
     }
 
     private void search(View v){
@@ -162,7 +122,14 @@ public class RouteMasterFragment extends Fragment {
         };
 
         if(ConnectionService.hasActiveInternetConnection(parentActivity)){
-            performSearch(v);
+            try{
+                performSearch(v);
+            }
+
+            catch (Exception ex){
+                System.out.println(ex.getMessage());
+            }
+
         }
 
         else{
@@ -170,25 +137,21 @@ public class RouteMasterFragment extends Fragment {
         }
     }
 
-    private void performSearch(View v){
+    private void performSearch(View v) throws RouteNotFoundException{
         Route selectedRoute = getRouteFromClickedView(v);
         parentActivity.initializeDetailFragment(selectedRoute,getResources().getConfiguration().orientation);
     }
 
-    private Route getRouteFromClickedView(View view){
+    private Route getRouteFromClickedView(View view) throws RouteNotFoundException,NullPointerException {
         TextView departureTime = (TextView) view.findViewById(R.id.routeListTimeStation1);
-        TextView arrivalTime = (TextView) view.findViewById(R.id.routeListTimeStation2);
-        TextView departureStation = (TextView) view.findViewById(R.id.routeListStation1);
-        TextView arrivalStation = (TextView) view.findViewById(R.id.routeListStation2);
-        TextView departureDelay = (TextView) view.findViewById(R.id.routeListDelayDeparture);
-        TextView arrivalDelay = (TextView) view.findViewById(R.id.routeListDelayArrival);
 
-        Route selectedRoute = new Route(departureStation.getText().toString(),arrivalStation.getText().toString(),departureTime.getText().toString()
-                                        ,arrivalTime.getText().toString(),departureDelay.getText().toString(),arrivalDelay.getText().toString(),
-                        0,0,vehicleIdMap.get(departureTime.getText().toString()));
-        if(mDate != null && mDate != ""){
-            selectedRoute.setDate(mDate);
+        if(mRoutes != null){
+           Route selectedRoute = mRoutes.getRouteByDepartureTime(departureTime.getText().toString());
+           return selectedRoute;
         }
-        return selectedRoute;
+
+        else{
+            throw new NullPointerException("mRoutes is null");
+        }
     }
 }

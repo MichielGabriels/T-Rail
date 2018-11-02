@@ -7,98 +7,97 @@ import be.pxl.student.t_rail.services.TimeService;
 
 public class RouteDetail {
 
-    private String station1;
-    private String station2;
-    private String time1;
-    private String time2;
-    private String platform1;
-    private String platform2;
-    private String delay1;
-    private String delay2;
+    private String station;
+    private String timeArrival;
+    private String timeDeparture;
+    private String platform;
+    private String delayArrival;
+    private String delayDeparture;
 
-    public RouteDetail(String station1, String station2, String time1, String time2, String platform1, String platform2,String delay1,String delay2) {
-       this.setStation1(station1);
-       this.setStation2(station2);
-       this.setTime1(time1);
-       this.setTime2(time2);
-       this.setPlatform1(platform1);
-       this.setPlatform2(platform2);
-       this.setDelay1(delay1);
-       setDelay2(delay2);
+    public RouteDetail(String station, String station2, String timeArrival, String timeDeparture, String platform, String platform2, String delayArrival, String delay2) {
+       this.setStation(station);
+       this.setTimeArrival(timeArrival);
+       this.setTimeDeparture(timeDeparture);
+       this.setDelayArrival(delayArrival);
+       setDelayDeparture(delay2);
     }
 
-    public RouteDetail(String station1,String time1,String platform1,String delay1){
-        setStation1(station1);
-        setTime1(time1);
-        setPlatform1(platform1);
-        setDelay1(delay1);
+    public RouteDetail(String station, String timeArrival, String platform, String delayArrival){
+        setStation(station);
+        setTimeArrival(timeArrival);
+        setPlatform(platform);
+        setDelayArrival(delayArrival);
     }
 
-    public RouteDetail(JSONObject jsonObject) throws JSONException {
-        this(jsonObject.getString("station"),TimeService.extractTimeFromJsonObject(jsonObject.getString("time")),jsonObject.getString("platform"),TimeService.convertDelayFromSecondsToMinutes(jsonObject.getString("departureDelay")));
+    public RouteDetail(JSONObject jsonObject) {
+        try{
+            extractDetailsFromJsonObject(jsonObject);
+        }
+
+        catch (JSONException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
-    public String getStation1() {
-        return station1;
+    public String getStation() {
+        return station;
     }
 
-    public void setStation1(String station1) {
-        this.station1 = station1;
+    public void setStation(String station) {
+        this.station = station;
     }
 
-    public String getStation2() {
-        return station2;
+    public String getTimeArrival() {
+        return timeArrival;
     }
 
-    public void setStation2(String station2) {
-        this.station2 = station2;
+    public void setTimeArrival(String timeArrival) {
+        this.timeArrival = timeArrival;
     }
 
-    public String getTime1() {
-        return time1;
+    public String getTimeDeparture() {
+        return timeDeparture;
     }
 
-    public void setTime1(String time1) {
-        this.time1 = time1;
+    public void setTimeDeparture(String timeDeparture) {
+        this.timeDeparture = timeDeparture;
     }
 
-    public String getTime2() {
-        return time2;
+    public String getPlatform() {
+        return platform;
     }
 
-    public void setTime2(String time2) {
-        this.time2 = time2;
+    public void setPlatform(String platform) {
+        this.platform = "Perron " + platform;
     }
 
-    public String getPlatform1() {
-        return platform1;
+    public String getDelayArrival() {
+        return delayArrival;
     }
 
-    public void setPlatform1(String platform1) {
-        this.platform1 = "perron " + platform1;
+    public void setDelayArrival(String delayArrival) {
+        this.delayArrival = "+" + TimeService.convertDelayFromSecondsToMinutes(delayArrival);
     }
 
-    public String getPlatform2() {
-        return platform2;
+    public String getDelayDeparture() {
+        return delayDeparture;
     }
 
-    public void setPlatform2(String platform2) {
-        this.platform2 = platform2;
+    public void setDelayDeparture(String delayDeparture) {
+        this.delayDeparture = "+" + TimeService.convertDelayFromSecondsToMinutes(delayDeparture);
     }
 
-    public String getDelay1() {
-        return delay1;
-    }
+    private void extractDetailsFromJsonObject(JSONObject jsonObject) throws JSONException{
+        setStation(jsonObject.getString("station"));
+        setPlatform(jsonObject.getString("platform"));
+        setDelayArrival(jsonObject.getString("arrivalDelay"));
+        setDelayDeparture(jsonObject.getString("departureDelay"));
 
-    public void setDelay1(String delay1) {
-        this.delay1 = "+" + delay1;
-    }
-
-    public String getDelay2() {
-        return delay2;
-    }
-
-    public void setDelay2(String delay2) {
-        this.delay2 = delay2;
+        String timeArrival = jsonObject.getString("scheduledArrivalTime");
+        String timeDeparture = jsonObject.getString("scheduledDepartureTime");
+        timeArrival = TimeService.extractTimeFromJsonObject(timeArrival);
+        timeDeparture = TimeService.extractTimeFromJsonObject(timeDeparture);
+        setTimeDeparture(timeDeparture);
+        setTimeArrival(timeArrival);
     }
 }

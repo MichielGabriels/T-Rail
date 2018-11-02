@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
 import be.pxl.student.t_rail.domainClasses.Route;
+import be.pxl.student.t_rail.domainClasses.RouteCollection;
 import be.pxl.student.t_rail.tasks.RouteDetailHttpTask;
 
 public class RouteMasterDetailActivity extends FragmentActivity {
@@ -15,12 +16,10 @@ public class RouteMasterDetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_master);
 
-        String connections = getIntent().getStringExtra("connections");
-        String date = getIntent().getStringExtra("date");
+        RouteCollection routes = (RouteCollection) getIntent().getSerializableExtra("routes");
 
         Bundle dataBundle = new Bundle();
-        dataBundle.putString("connections",connections);
-        dataBundle.putString("date",date);
+        dataBundle.putSerializable("routes",routes);
         initializeMasterFragement(dataBundle);
     }
 

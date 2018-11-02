@@ -12,6 +12,7 @@ import java.io.IOException;
 import be.pxl.student.t_rail.R;
 import be.pxl.student.t_rail.RouteDetailFragment;
 import be.pxl.student.t_rail.domainClasses.Route;
+import be.pxl.student.t_rail.domainClasses.RouteDetailCollection;
 import be.pxl.student.t_rail.models.RouteDetailResponseModel;
 import be.pxl.student.t_rail.dialogs.RouteDialog;
 import be.pxl.student.t_rail.services.ApiService;
@@ -58,12 +59,12 @@ public class RouteDetailHttpTask extends AsyncTask<Route,String,RouteDetailRespo
     protected void onPostExecute(RouteDetailResponseModel result) {
        dialog.close();
         RouteDetailFragment detailFragment = new RouteDetailFragment();
+        RouteDetailCollection routeDetails = new RouteDetailCollection(result.getResponse());
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         Bundle dataBundle = new Bundle();
-        dataBundle.putString("routeDetails",result.getResponse());
+        dataBundle.putSerializable("routeDetails",routeDetails);
         dataBundle.putSerializable("selectedRoute",result.getSelectedRoute());
-        /*dataBundle.putString("time",result.getTime());
-        dataBundle.putString("departureStation",result.getDepartureStation());*/
+
 
         detailFragment.setArguments(dataBundle);
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){

@@ -20,6 +20,7 @@ import java.util.List;
 
 import be.pxl.student.t_rail.adapters.RouteDetailAdapter;
 import be.pxl.student.t_rail.dialogs.OptionsDialog;
+import be.pxl.student.t_rail.domainClasses.RouteDetailCollection;
 import be.pxl.student.t_rail.events.DialogClickEvent;
 import be.pxl.student.t_rail.events.LongClickEvent;
 import be.pxl.student.t_rail.domainClasses.Route;
@@ -28,6 +29,7 @@ import be.pxl.student.t_rail.domainClasses.RouteDetail;
 public class RouteDetailFragment extends Fragment {
 
     private Route mSelectedRoute;
+    private RouteDetailCollection mRouteDetails;
 
     public RouteDetailFragment() {
 
@@ -44,33 +46,18 @@ public class RouteDetailFragment extends Fragment {
         Bundle dataBundle = getArguments();
 
         if(dataBundle != null){
-            String routeDetails = dataBundle.getString("routeDetails");
+            mRouteDetails = (RouteDetailCollection) dataBundle.getSerializable("routeDetails");
             mSelectedRoute = (Route) dataBundle.getSerializable("selectedRoute");
-            try{
-                JSONObject jsonObject = new JSONObject(routeDetails);
-                JSONArray stops = jsonObject.getJSONObject("stops").getJSONArray("stop");
-                ArrayList<RouteDetail> details = extractRouteDetailsFromJsonArray(stops);
-                initializeRecyclerView(view,details);
-            }
+        }
 
-            catch (JSONException ex){
-                System.out.println(ex.getMessage());
-            }
+        if(mRouteDetails != null){
+            initializeRecyclerView(view,mRouteDetails);
         }
         return view;
     }
 
-    private ArrayList<RouteDetail> extractRouteDetailsFromJsonArray(JSONArray jsonArray) throws JSONException{
-        ArrayList<RouteDetail> details = new ArrayList<>();
-        for(int index = 0 ;index<jsonArray.length();index++){
-            JSONObject currentObject = jsonArray.getJSONObject(index);
-            details.add(new RouteDetail(currentObject));
-        }
-        return details;
-    }
-
     //TODO: add notification service to dialogClickEvent
-    private void initializeRecyclerView(View view,List<RouteDetail> details){
+    private void initializeRecyclerView(View view,RouteDetailCollection detailsCollection){
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteDetails);
         DialogClickEvent dialogClickEvent = new DialogClickEvent((dialog,which) ->{
             Toast.makeText(getContext(),String.format("%s->%s",mSelectedRoute.getStationDeparture(),mSelectedRoute.getStationArrival()),Toast.LENGTH_SHORT).show();
@@ -83,21 +70,7 @@ public class RouteDetailFragment extends Fragment {
 
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        RouteDetailAdapter adapter = new RouteDetailAdapter(details,longClickEvent);
+        RouteDetailAdapter adapter = new RouteDetailAdapter(detailsCollection.getRouteDetails(),longClickEvent);
         recyclerView.setAdapter(adapter);
     }
-
-    /*@Override
-    public void onPause() {
-        super.onPause();
-        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new NotificationCompat.Builder(getContext(),"CHANNEL_ID")
-                .setSmallIcon(R.drawable.t_rail_logo)
-                .setContentTitle("Running")
-                .setContentText("App is still running in background")
-                .setDefaults(Notification.DEFAULT_ALL)
-                .build();
-        notificationManager.notify(0,notification);
-
-    }*/
 }

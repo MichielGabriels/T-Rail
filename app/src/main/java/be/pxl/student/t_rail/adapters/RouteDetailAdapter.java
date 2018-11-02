@@ -26,7 +26,7 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
         public TextView txtDelayArrival;
         public TextView txtDelayDeparture;
 
-        //TODO and add time2,delay1,delay2 to adapter
+
         public RouteDetailViewHolder(View view) {
             super(view);
             txtStation = (TextView) view.findViewById(R.id.textViewFrom);
@@ -34,8 +34,7 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
             txtTimeDeparture = (TextView) view.findViewById(R.id.routeDetailTimeDeparture);
             txtPlatform = (TextView) view.findViewById(R.id.routeDetailPlatform);
             txtDelayArrival = (TextView) view.findViewById(R.id.routeDetailDelayArrival);
-            txtDelayDeparture = (TextView) view.findViewById(R.id.routeListDelayDeparture);
-
+            txtDelayDeparture = (TextView) view.findViewById(R.id.routeDetailDelayDeparture);
             view.setOnLongClickListener(mLongClickEvent);
         }
     }
@@ -52,14 +51,14 @@ public class RouteDetailAdapter extends RecyclerView.Adapter<RouteDetailAdapter.
     }
 
     @Override
-    //TODO: add all members of routeDetail
     public void onBindViewHolder(RouteDetailViewHolder routeDetailViewHolder, int selectedIndex) {
         RouteDetail routeDetail = mRouteDetails.get(selectedIndex);
-        routeDetailViewHolder.txtStation.setText(routeDetail.getStation1());
-        routeDetailViewHolder.txtTimeArrival.setText(routeDetail.getTime1());
-        //routeDetailViewHolder.txtTimeDeparture.setText(routeDetail.getTime2());
-        routeDetailViewHolder.txtPlatform.setText(routeDetail.getPlatform1());
-
+        routeDetailViewHolder.txtStation.setText(routeDetail.getStation());
+        routeDetailViewHolder.txtTimeArrival.setText(routeDetail.getTimeArrival());
+        routeDetailViewHolder.txtTimeDeparture.setText(routeDetail.getTimeDeparture());
+        routeDetailViewHolder.txtPlatform.setText(routeDetail.getPlatform());
+        routeDetailViewHolder.txtDelayArrival.setText(routeDetail.getDelayArrival());
+        routeDetailViewHolder.txtDelayDeparture.setText(routeDetail.getDelayDeparture());
     }
 
     @Override
