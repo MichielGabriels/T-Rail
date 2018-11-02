@@ -51,7 +51,7 @@ public class FavouritesActivity extends AppCompatActivity {
         mTextViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
         mTextViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
 
-        ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this, R.layout.autocomplete_stations, StationCollection.getStations());
+        ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this, R.layout.autocomplete_stations, StationCollection.getStations(true));
         mTextViewFrom.setThreshold(1);
         mTextViewTo.setThreshold(1);
 
@@ -173,7 +173,7 @@ public class FavouritesActivity extends AppCompatActivity {
 
     private boolean validateStations(String fromStation, String toStation) {
         if (!TextUtils.isEmpty(fromStation) && !TextUtils.isEmpty(toStation)) {
-            ArrayList<String> stations = StationCollection.getStations();
+            ArrayList<String> stations = StationCollection.getStations(false);
 
             if (stations.contains(fromStation) || stations.contains(toStation)) {
                 return true;

@@ -60,8 +60,6 @@ public class RoutePlanActivity extends AppCompatActivity {
         mDatabaseFavourites = FirebaseDatabase.getInstance().getReference("favourites"); // .getReference() --> get the reference of the root node of the json tree
         mFavouriteList = new ArrayList<>();
 
-
-
         initViewComponents();
     }
 
@@ -70,9 +68,11 @@ public class RoutePlanActivity extends AppCompatActivity {
             return false;
         }
 
-        ArrayList<String> stations = StationCollection.getStations();
+        ArrayList<String> stations = StationCollection.getStations(true);
 
-        if (!stations.contains(textViewFrom.getText().toString()) || !stations.contains(textViewTo.getText().toString())) {
+
+
+        if (!stations.contains(textViewFrom.getText().toString().toLowerCase()) || !stations.contains(textViewTo.getText().toString().toLowerCase())) {
             return false;
         }
 
@@ -210,7 +210,7 @@ public class RoutePlanActivity extends AppCompatActivity {
         mEditTextDate = (EditText) findViewById(R.id.editTextDate);
 
         //init adapters for suggestions
-        ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this,R.layout.autocomplete_stations,StationCollection.getStations());
+        ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this,R.layout.autocomplete_stations,StationCollection.getStations(false));
         textViewFrom.setThreshold(1);
         textViewTo.setThreshold(1);
 
