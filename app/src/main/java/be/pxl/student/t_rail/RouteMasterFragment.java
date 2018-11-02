@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,9 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import be.pxl.student.t_rail.adapters.RouteMasterAdapter;
+import be.pxl.student.t_rail.dialogs.OptionsDialog;
 import be.pxl.student.t_rail.events.ClickEvent;
 import be.pxl.student.t_rail.dialogs.ConnectionAlertDialog;
 import be.pxl.student.t_rail.domainClasses.Route;
+import be.pxl.student.t_rail.events.DialogClickEvent;
+import be.pxl.student.t_rail.events.LongClickEvent;
 import be.pxl.student.t_rail.services.ConnectionService;
 
 public class RouteMasterFragment extends Fragment {
@@ -101,10 +105,19 @@ public class RouteMasterFragment extends Fragment {
         return routes;
     }
 
+    //TODO: add notification service to dialogClickEvent
     private void initializeData(View view,String jsonString) throws JSONException{
         JSONArray connections = new JSONObject(jsonString).getJSONArray("connection");
         ArrayList<Route> routes = extractRoutesFromJsonArray(connections);
-
+        LongClickEvent itemLongClick = new LongClickEvent((v) -> {
+            Route selectedRoute = getRouteFromClickedView(v);
+            DialogClickEvent dialogClickEvent = new DialogClickEvent((dialog,which) ->{
+                Toast.makeText(getContext(),String.format("%s->%s",selectedRoute.getTimeDeparture(),selectedRoute.getTimeArrival()),Toast.LENGTH_SHORT).show();
+            });
+            String[] dialogValues = new String[]{"Volg route"};
+            OptionsDialog dialog = new OptionsDialog(getActivity(),dialogValues,dialogClickEvent);
+            dialog.show();
+        });
         ClickEvent itemClick = new ClickEvent((v) ->{
             search(v);
         });
@@ -112,7 +125,7 @@ public class RouteMasterFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteMaster);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        RouteMasterAdapter adapter = new RouteMasterAdapter(routes,itemClick);
+        RouteMasterAdapter adapter = new RouteMasterAdapter(routes,itemClick,itemLongClick);
         recyclerView.setAdapter(adapter);
     }
 
@@ -158,11 +171,6 @@ public class RouteMasterFragment extends Fragment {
     }
 
     private void performSearch(View v){
-        /*TextView departTime  = (TextView) v.findViewById(R.id.routeListTimeStation1);
-        TextView departStation = (TextView) v.findViewById(R.id.routeListStation1);
-        String time = departTime.getText().toString();
-        String departStationText = departStation.getText().toString();
-        String vehicleId = vehicleIdMap.get(time);*/
         Route selectedRoute = getRouteFromClickedView(v);
         parentActivity.initializeDetailFragment(selectedRoute,getResources().getConfiguration().orientation);
     }

@@ -69,7 +69,7 @@ public class RouteDetailFragment extends Fragment {
         return details;
     }
 
-    //TODO: add notification service to dialogClickevent
+    //TODO: add notification service to dialogClickEvent
     private void initializeRecyclerView(View view,List<RouteDetail> details){
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteDetails);
         DialogClickEvent dialogClickEvent = new DialogClickEvent((dialog,which) ->{
