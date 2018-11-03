@@ -71,6 +71,7 @@ public class RouteDetailHttpTask extends AsyncTask<Route,String,RouteDetailRespo
             transaction.replace(R.id.fragmentDetailHolder,detailFragment);
         }
 
+        //portrait mode
         else{
             //addToBackStack saves previous transaction(masterFragment) so we can navigate back
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);

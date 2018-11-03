@@ -51,7 +51,7 @@ public class FavouritesActivity extends AppCompatActivity {
         mTextViewFrom = (AutoCompleteTextView) findViewById(R.id.textViewFrom);
         mTextViewTo = (AutoCompleteTextView) findViewById(R.id.textViewTo);
 
-        ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this, R.layout.autocomplete_stations, StationCollection.getStations(true));
+        ArrayAdapter<String> textViewAdapter = new ArrayAdapter(this, R.layout.autocomplete_stations, StationCollection.getStations(false));
         mTextViewFrom.setThreshold(1);
         mTextViewTo.setThreshold(1);
 
@@ -111,6 +111,8 @@ public class FavouritesActivity extends AppCompatActivity {
     private void addFavourite() {
         String fromStation = mTextViewFrom.getText().toString().trim();
         String toStation = mTextViewTo.getText().toString().trim();
+        fromStation = fromStation.substring(0,1).toUpperCase() + fromStation.substring(1).toLowerCase();
+        toStation = toStation.substring(0,1).toUpperCase() + toStation.substring(1).toLowerCase();
 
         if (this.validateStations(fromStation, toStation)) {
 
@@ -173,9 +175,9 @@ public class FavouritesActivity extends AppCompatActivity {
 
     private boolean validateStations(String fromStation, String toStation) {
         if (!TextUtils.isEmpty(fromStation) && !TextUtils.isEmpty(toStation)) {
-            ArrayList<String> stations = StationCollection.getStations(false);
+            ArrayList<String> stations = StationCollection.getStations(true);
 
-            if (stations.contains(fromStation) || stations.contains(toStation)) {
+            if (stations.contains(fromStation.toLowerCase()) || stations.contains(toStation.toLowerCase())) {
                 return true;
             }
         }
