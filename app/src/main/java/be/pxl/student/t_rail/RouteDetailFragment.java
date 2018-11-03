@@ -2,6 +2,7 @@ package be.pxl.student.t_rail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +38,7 @@ public class RouteDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_route_detail, container, false);
         Bundle dataBundle = getArguments();
 
+        //take data that is passed to fragment
         if(dataBundle != null){
             mRouteDetails = (RouteDetailCollection) dataBundle.getSerializable("routeDetails");
             mSelectedRoute = (Route) dataBundle.getSerializable("selectedRoute");
@@ -48,8 +50,7 @@ public class RouteDetailFragment extends Fragment {
         return view;
     }
 
-    //TODO: add notification service to dialogClickEvent
-    private void initializeRecyclerView(View view,RouteDetailCollection detailsCollection){
+    private void initializeRecyclerView(View view, RouteDetailCollection detailsCollection){
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteDetails);
         DialogClickEvent dialogClickEvent = new DialogClickEvent((dialog,which) ->{
             Intent intent = new Intent(getContext(),NotificationService.class);
