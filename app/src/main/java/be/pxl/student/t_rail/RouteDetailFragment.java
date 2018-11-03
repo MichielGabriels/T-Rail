@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import be.pxl.student.t_rail.adapters.RouteDetailAdapter;
 import be.pxl.student.t_rail.dialogs.OptionsDialog;
@@ -56,6 +57,7 @@ public class RouteDetailFragment extends Fragment {
             Intent intent = new Intent(getContext(),NotificationService.class);
             intent.putExtra("route",mSelectedRoute);
             getActivity().startService(intent);
+            Toast.makeText(getContext(),"Route wordt gevolgd",Toast.LENGTH_SHORT).show();
         });
         String[] dialogValues = new String[]{"Volg route"};
         LongClickEvent longClickEvent = new LongClickEvent((v) ->{

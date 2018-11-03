@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import be.pxl.student.t_rail.adapters.RouteMasterAdapter;
 import be.pxl.student.t_rail.dialogs.OptionsDialog;
@@ -79,6 +80,7 @@ public class RouteMasterFragment extends Fragment {
                     Intent intent = new Intent(getContext(),NotificationService.class);
                     intent.putExtra("route",selectedRoute);
                     getActivity().startService(intent);
+                    Toast.makeText(getContext(),"Route wordt gevolgd",Toast.LENGTH_SHORT).show();
                 });
             }
 
