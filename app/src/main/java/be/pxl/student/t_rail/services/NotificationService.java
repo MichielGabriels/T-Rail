@@ -32,7 +32,8 @@ public class NotificationService extends IntentService {
     private ArrayList<Route> mRoutes;
     private final List<Long> mNotifyMinutes = Arrays.asList(30L,15L,10L,5L);
     private Timer mTimer;
-    private String mChannelId;
+    private final String CHANNEL_ID = "t-rail notifications";
+    private final int NOTIFICATION_ID = 001;
     private NotificationManager mNotificationManager;
 
     public NotificationService(){
@@ -137,19 +138,19 @@ public class NotificationService extends IntentService {
     }
 
     private void notifyRoute(long minutes,Route route){
-        mNotificationManager.notify(0,buildNotification(minutes,route));
+        mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
     }
 
     private Notification buildNotification(long minutes,Route route){
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,mChannelId);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID);
         builder.setSmallIcon(R.drawable.t_rail_logo)
                 .setContentTitle(String.format("Trein vertrekt in %d minuten",minutes))
-                .setContentText(String.format("%s - %s vertrekt over %d minuten vanaf perron %d",route.getStationDeparture(),route.getStationArrival(),minutes,route.getPlatformDeparture()));
+                .setContentText(String.format("%s-%s vertrekt in %d minuten op perron %d",route.getStationDeparture(),route.getStationArrival(),minutes,route.getPlatformDeparture()));
         return builder.build();
     }
 
     private void createNotificationChannel(){
-        mChannelId = UUID.randomUUID().toString();
+
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -157,7 +158,7 @@ public class NotificationService extends IntentService {
             String description = getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
-            NotificationChannel channel = new NotificationChannel(mChannelId, name, importance);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this

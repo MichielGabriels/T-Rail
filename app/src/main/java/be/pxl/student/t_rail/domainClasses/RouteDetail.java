@@ -3,9 +3,11 @@ package be.pxl.student.t_rail.domainClasses;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import be.pxl.student.t_rail.services.TimeService;
 
-public class RouteDetail {
+public class RouteDetail implements Serializable {
 
     private String station;
     private String timeArrival;
