@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
@@ -137,8 +138,13 @@ public class NotificationService extends IntentService {
         }
     }
 
+    //the wakeLock will wake the device, this way it shows notifications when the device is locked
     private void notifyRoute(long minutes,Route route){
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"my:tag");
+        wakeLock.acquire();
         mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
+        wakeLock.release();
     }
 
     private Notification buildNotification(long minutes,Route route){
