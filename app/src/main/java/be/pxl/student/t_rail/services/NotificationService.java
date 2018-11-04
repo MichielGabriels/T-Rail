@@ -141,13 +141,21 @@ public class NotificationService extends IntentService {
     //the wakeLock will wake the device, this way it shows notifications when the device is locked
     private void notifyRoute(long minutes,Route route){
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"my:tag");
-        wakeLock.acquire();
-        mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
-        wakeLock.release();
+        if(powerManager.isScreenOn()){
+            mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
+        }
+        else{
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"my:tag");
+            wakeLock.acquire();
+            mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
+            wakeLock.release();
+        }
+
     }
 
-    private Notification buildNotification(long minutes,Route route){
+
+
+    private Notification buildNotification(long minutes, Route route){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID);
         builder.setSmallIcon(R.drawable.t_rail_logo)
                 .setContentTitle(String.format("Trein vertrekt in %d minuten",minutes))
