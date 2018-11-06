@@ -140,11 +140,11 @@ public class NotificationService extends IntentService {
 
     //the wakeLock will wake the device, this way it shows notifications when the device is locked
     private void notifyRoute(long minutes,Route route){
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        /*PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"my:tag");
-        wakeLock.acquire();
+        wakeLock.acquire();*/
         mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
-        wakeLock.release();
+        //wakeLock.release();
     }
 
     private Notification buildNotification(long minutes,Route route){
