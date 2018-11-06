@@ -16,12 +16,15 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".HomeActivity"
-            android:windowSoftInputMode="adjustNothing"></activity>
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".RoutePlanActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".RouteMasterDetailActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".FavouritesActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".LaunchActivity">
             <intent-filter>
@@ -30,7 +33,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FavouritesActivity"></activity>
         <service android:name=".services.NotificationService"></service>
     </application>
 
