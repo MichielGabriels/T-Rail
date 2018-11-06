@@ -152,12 +152,12 @@ public class RoutePlanActivity extends AppCompatActivity {
     }
 
     private void insertFavourites(View view) {
-        TextView textViewListItem = (TextView) findViewById(R.id.textViewListItem);
+        TextView textViewListItem = (TextView) view.findViewById(R.id.textViewListItem);
 
         String[] favouriteRouteStations = textViewListItem.getText().toString().trim().split("-->");
 
-        textViewFrom.setText(favouriteRouteStations[0]);
-        textViewTo.setText(favouriteRouteStations[1]);
+        textViewFrom.setText(favouriteRouteStations[0].trim());
+        textViewTo.setText(favouriteRouteStations[1].trim());
     }
 
     private void initViewComponents(){
