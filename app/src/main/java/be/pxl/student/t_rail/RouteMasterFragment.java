@@ -180,4 +180,5 @@ public class RouteMasterFragment extends Fragment {
         NotificationService.unwatchRoute(selectedRoute);
         Toast.makeText(getContext(),"Route wordt niet meer gevolgd",Toast.LENGTH_SHORT).show();
     }
+
 }
