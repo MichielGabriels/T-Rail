@@ -179,8 +179,6 @@ public class RoutePlanActivity extends AppCompatActivity {
         textViewFrom.setAdapter(textViewAdapter);
         textViewTo.setAdapter(textViewAdapter);
 
-        //TODO: implement dateTime picker
-        //TODO: remove current system date and time after dateTime picker is implemented
         ClickEvent searchClick = new ClickEvent((view) ->{
             performSearch();
         });

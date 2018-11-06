@@ -70,7 +70,7 @@ public class RouteMasterFragment extends Fragment {
     }
 
 
-    //TODO: add notification service to dialogClickEvent
+
     private void initializeData(View view,RouteCollection routeCollection){
         LongClickEvent itemLongClick = new LongClickEvent((v) -> {
 
