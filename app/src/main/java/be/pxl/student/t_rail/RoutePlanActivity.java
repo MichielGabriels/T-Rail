@@ -1,6 +1,7 @@
 package be.pxl.student.t_rail;
 
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,12 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +24,7 @@ import java.util.List;
 import be.pxl.student.t_rail.adapters.FavouritesAdapter;
 import be.pxl.student.t_rail.events.ClickEvent;
 import be.pxl.student.t_rail.dialogs.ConnectionAlertDialog;
-import be.pxl.student.t_rail.domainClasses.Favourite;
+import be.pxl.student.t_rail.helpers.DatabaseHelper;
 import be.pxl.student.t_rail.services.ConnectionService;
 import be.pxl.student.t_rail.domainClasses.StationCollection;
 import be.pxl.student.t_rail.services.TimeService;
@@ -41,25 +36,19 @@ public class RoutePlanActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List<Favourite> mFavouriteList;
-
     private AutoCompleteTextView textViewFrom;
     private AutoCompleteTextView textViewTo;
 
     private EditText mEditTextTime;
     private EditText mEditTextDate;
 
-    private DatabaseReference mDatabaseFavourites;
+    private DatabaseHelper mDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
-
-        //init favourites data
-        mDatabaseFavourites = FirebaseDatabase.getInstance().getReference("favourites"); // .getReference() --> get the reference of the root node of the json tree
-        mFavouriteList = new ArrayList<>();
-
+        mDatabaseHelper = new DatabaseHelper(this);
         initViewComponents();
     }
 
@@ -82,34 +71,7 @@ public class RoutePlanActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        mDatabaseFavourites.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                mFavouriteList.clear();
-
-                for (DataSnapshot favouriteSnapshot : dataSnapshot.getChildren()) {
-                    Favourite favourite = favouriteSnapshot.getValue(Favourite.class);
-                    mFavouriteList.add(favourite);
-                }
-
-                mLayoutManager = new LinearLayoutManager(getParent());
-                mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
-
-                ClickEvent itemClick = new ClickEvent((view) ->{
-                    insertFavourites(view);
-                });
-
-                mAdapter = new FavouritesAdapter(mFavouriteList, itemClick);
-                mRecyclerViewFavourites.setAdapter(mAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(RoutePlanActivity.this, "Oeps! Er is iets misgelopen!", Toast.LENGTH_LONG).show();
-            }
-        });
+        this.populateFavouritesRecyclerView();
     }
 
     private String formatTime(String time){
@@ -236,4 +198,21 @@ public class RoutePlanActivity extends AppCompatActivity {
         dateTimeNowButton.setOnClickListener(timeAndDateNowClick);
     }
 
+    private void populateFavouritesRecyclerView() {
+        Cursor data = mDatabaseHelper.getData();
+        List<String> favouriteList = new ArrayList<>();
+        while (data.moveToNext()) {
+            favouriteList.add(data.getString(1) + " --> " + data.getString(2));
+        }
+
+        mLayoutManager = new LinearLayoutManager(getParent());
+        mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
+
+        ClickEvent itemClick = new ClickEvent((view) ->{
+            // Do nothing
+        });
+
+        mAdapter = new FavouritesAdapter(favouriteList, itemClick);
+        mRecyclerViewFavourites.setAdapter(mAdapter);
+    }
 }

@@ -9,11 +9,10 @@ import android.widget.TextView;
 import java.util.List;
 
 import be.pxl.student.t_rail.R;
-import be.pxl.student.t_rail.domainClasses.Favourite;
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder> {
 
-    private List<Favourite> mFavouritesList;
+    private List<String> mFavouritesList;
 
     private View.OnClickListener mOnClickListener;
 
@@ -29,7 +28,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         }
     }
 
-    public FavouritesAdapter(List<Favourite> favourites, View.OnClickListener clickEvent) {
+    public FavouritesAdapter(List<String> favourites, View.OnClickListener clickEvent) {
         mFavouritesList = favourites;
         mOnClickListener = clickEvent;
     }
@@ -49,7 +48,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     public void onBindViewHolder(FavouritesViewHolder favouritesViewHolder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        favouritesViewHolder.mTextView.setText(mFavouritesList.get(position).getFromStation() + " --> " + mFavouritesList.get(position).getToStation());
+        favouritesViewHolder.mTextView.setText(mFavouritesList.get(position));
     }
 
     // Return the size of your dataset
