@@ -73,26 +73,40 @@ public class RouteMasterFragment extends Fragment {
     //TODO: add notification service to dialogClickEvent
     private void initializeData(View view,RouteCollection routeCollection){
         LongClickEvent itemLongClick = new LongClickEvent((v) -> {
-            DialogClickEvent dialogClickEvent = null;
-            try{
-               Route selectedRoute = getRouteFromClickedView(v);
-                dialogClickEvent = new DialogClickEvent((dialog,which) ->{
-                    Intent intent = new Intent(getContext(),NotificationService.class);
-                    intent.putExtra("route",selectedRoute);
-                    getActivity().startService(intent);
-                    Toast.makeText(getContext(),"Route wordt gevolgd",Toast.LENGTH_SHORT).show();
+
+            try {
+                DialogClickEvent dialogClickEvent;
+                Route selectedRoute = getRouteFromClickedView(v);
+
+                DialogClickEvent dialogFollowEvent = new DialogClickEvent((dialog, which) -> {
+                    followRoute(selectedRoute);
                 });
-            }
 
-            catch (RouteNotFoundException ex){
-                System.out.println(ex.getMessage());
-            }
+                DialogClickEvent dialogUnfollowEvent = new DialogClickEvent(((dialog, which) -> {
+                    unFollowRoute(selectedRoute);
+                }));
 
 
-            String[] dialogValues = new String[]{"Volg route"};
-            if(dialogClickEvent != null){
-                OptionsDialog dialog = new OptionsDialog(getActivity(),dialogValues,dialogClickEvent);
+                String[] dialogValues = null;
+
+                //unfollow
+                if (NotificationService.routesIsWatched(selectedRoute)) {
+                    dialogValues = new String[]{"Notificatie uit"};
+                    dialogClickEvent = dialogUnfollowEvent;
+                }
+
+                //follow
+                else{
+                    dialogValues = new String[]{"Notificatie aan"};
+                    dialogClickEvent = dialogFollowEvent;
+                }
+
+                OptionsDialog dialog = new OptionsDialog(getActivity(), dialogValues, dialogClickEvent);
                 dialog.show();
+            }
+
+            catch (RouteNotFoundException ex) {
+                Toast.makeText(getContext(),"Oops,er is een fout opgetreden",Toast.LENGTH_SHORT).show();
             }
         });
         ClickEvent itemClick = new ClickEvent((v) ->{
@@ -155,4 +169,15 @@ public class RouteMasterFragment extends Fragment {
         }
     }
 
+    private void followRoute(Route selectedRoute){
+        Intent intent = new Intent(getContext(),NotificationService.class);
+        intent.putExtra("route",selectedRoute);
+        getActivity().startService(intent);
+        Toast.makeText(getContext(),"Route wordt gevolgd",Toast.LENGTH_SHORT).show();
+    }
+
+    private void unFollowRoute(Route selectedRoute){
+        NotificationService.unwatchRoute(selectedRoute);
+        Toast.makeText(getContext(),"Route wordt niet meer gevolgd",Toast.LENGTH_SHORT).show();
+    }
 }
