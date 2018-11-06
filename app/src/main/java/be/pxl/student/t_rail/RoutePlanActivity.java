@@ -209,7 +209,7 @@ public class RoutePlanActivity extends AppCompatActivity {
         mRecyclerViewFavourites.setLayoutManager(mLayoutManager);
 
         ClickEvent itemClick = new ClickEvent((view) ->{
-            // Do nothing
+           insertFavourites(view);
         });
 
         mAdapter = new FavouritesAdapter(favouriteList, itemClick);
