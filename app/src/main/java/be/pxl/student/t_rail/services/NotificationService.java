@@ -30,7 +30,7 @@ import be.pxl.student.t_rail.domainClasses.Route;
 
 public class NotificationService extends IntentService {
 
-    private ArrayList<Route> mRoutes;
+    private static ArrayList<Route> mRoutes;
     private final List<Long> mNotifyMinutes = Arrays.asList(30L,15L,10L,5L);
     private Timer mTimer;
     private final String CHANNEL_ID = "t-rail notifications";
@@ -53,7 +53,10 @@ public class NotificationService extends IntentService {
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        mRoutes.add((Route) intent.getSerializableExtra("route"));
+        Route route = (Route) intent.getSerializableExtra("route");
+        if(!routesIsWatched(route)){
+            mRoutes.add(route);
+        }
         return super.onStartCommand(intent,flags,startId);
     }
 
@@ -140,17 +143,11 @@ public class NotificationService extends IntentService {
 
     //the wakeLock will wake the device, this way it shows notifications when the device is locked
     private void notifyRoute(long minutes,Route route){
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        if(powerManager.isScreenOn()){
-            mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
-        }
-        else{
-            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"my:tag");
-            wakeLock.acquire();
-            mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
-            wakeLock.release();
-        }
-
+        /*PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"my:tag");
+        wakeLock.acquire();*/
+        mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
+        //wakeLock.release();
     }
 
 
@@ -179,5 +176,17 @@ public class NotificationService extends IntentService {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    public static boolean routesIsWatched(Route route){
+        //service not running
+        if(mRoutes == null){
+            return false;
+        }
+        return mRoutes.contains(route);
+    }
+
+    public static void unwatchRoute(Route route){
+        mRoutes.remove(route);
     }
 }

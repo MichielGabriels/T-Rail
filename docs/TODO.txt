@@ -1,3 +1,0 @@
-TODO:
-
-ophalen alle stations bij opstarten.

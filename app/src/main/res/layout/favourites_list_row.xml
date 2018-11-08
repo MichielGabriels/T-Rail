@@ -12,6 +12,5 @@
         android:text="TextView"
         android:textSize="20dp"
         android:paddingTop="20dp"
-        android:clickable="true"
         />
 </android.support.constraint.ConstraintLayout>

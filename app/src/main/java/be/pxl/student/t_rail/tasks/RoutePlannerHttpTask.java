@@ -62,16 +62,12 @@ public class RoutePlannerHttpTask extends AsyncTask<String,String,RoutePlanRespo
     }
 
     @Override
-    //TODO: convert json response to routeCollection
-    //TODO: pass routeCollection to activity as seriazable intent
     protected void onPostExecute(RoutePlanResponseModel content) {
         if(_navigateAfter){
             if(_nextActivity != null){
                 Intent intent = new Intent(_context,_nextActivity);
                 RouteCollection routes = new RouteCollection(content.getResponse(),content.getDate());
                 intent.putExtra("routes",routes);
-               //intent.putExtra("connections",content.getResponse());
-               // intent.putExtra("date",content.getDate());
                 _context.startActivity(intent);
             }
         }

@@ -14,4 +14,6 @@ public class DialogClickEvent extends DialogEvent implements DialogInterface.OnC
     public void onClick(DialogInterface dialog, int which) {
         event.invoke(dialog,which);
     }
+
+
 }

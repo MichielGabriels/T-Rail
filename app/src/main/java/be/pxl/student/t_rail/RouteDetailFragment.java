@@ -53,14 +53,32 @@ public class RouteDetailFragment extends Fragment {
 
     private void initializeRecyclerView(View view, RouteDetailCollection detailsCollection){
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewRouteDetails);
-        DialogClickEvent dialogClickEvent = new DialogClickEvent((dialog,which) ->{
-            Intent intent = new Intent(getContext(),NotificationService.class);
-            intent.putExtra("route",mSelectedRoute);
-            getActivity().startService(intent);
-            Toast.makeText(getContext(),"Route wordt gevolgd",Toast.LENGTH_SHORT).show();
-        });
-        String[] dialogValues = new String[]{"Volg route"};
+
+
+
         LongClickEvent longClickEvent = new LongClickEvent((v) ->{
+            DialogClickEvent dialogClickEvent;
+            String[] dialogValues = null;
+
+            DialogClickEvent followEvent = new DialogClickEvent(((dialog, which) -> {
+                followRoute();
+            }));
+            DialogClickEvent unFollowEvent = new DialogClickEvent(((dialog, which) -> {
+                unFollowRoute();
+            }));
+
+            //unfollow
+            if(NotificationService.routesIsWatched(mSelectedRoute)){
+                dialogClickEvent = unFollowEvent;
+                dialogValues = new String[]{"Notificatie uit"};
+            }
+
+            //follow
+            else{
+                dialogClickEvent = followEvent;
+                dialogValues = new String[]{"Notificatie aan"};
+            }
+
             OptionsDialog dialog = new OptionsDialog(getActivity(),dialogValues,dialogClickEvent);
             dialog.show();
         });
@@ -72,4 +90,16 @@ public class RouteDetailFragment extends Fragment {
     }
 
 
+    public void followRoute(){
+        Intent intent = new Intent(getContext(),NotificationService.class);
+        intent.putExtra("route",mSelectedRoute);
+        getActivity().startService(intent);
+        Toast.makeText(getContext(),"Route wordt gevolgd",Toast.LENGTH_SHORT).show();
+    }
+
+    public void unFollowRoute(){
+        NotificationService.unwatchRoute(mSelectedRoute);
+        Toast.makeText(getContext(),"Route wordt niet meer gevolgd",Toast.LENGTH_SHORT).show();
+
+    }
 }

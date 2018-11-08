@@ -1,5 +1,7 @@
 package be.pxl.student.t_rail.domainClasses;
 
+import android.support.annotation.Nullable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -137,5 +139,16 @@ public class Route implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        Route route = (Route) obj;
+        if(route.getDate().equals(getDate()) && route.getTimeArrival().equals(getTimeArrival()) && route.getTimeDeparture().equals(getTimeDeparture()) &&
+                route.getStationArrival().equals(getStationArrival()) && route.getStationDeparture().equals(getStationDeparture())){
+           return true;
+        }
+
+        return false;
     }
 }
