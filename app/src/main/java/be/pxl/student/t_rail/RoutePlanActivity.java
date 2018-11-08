@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -188,12 +189,22 @@ public class RoutePlanActivity extends AppCompatActivity {
             mEditTextDate.setText(dateNow);
             mEditTextTime.setText(timeNow);
         });
+        ClickEvent switchInputs = new ClickEvent((view) ->{
+            String textFrom = textViewFrom.getText().toString();
+            String textTo = textViewTo.getText().toString();
+            if(!textFrom.equals("")&& !textTo.equals("")){
+                textViewFrom.setText(textTo);
+                textViewTo.setText(textFrom);
+            }
+        });
 
         Button searchButton = (Button) findViewById(R.id.buttonSearch);
         Button dateTimeNowButton = (Button) findViewById(R.id.buttonDateTimeNow);
+        ImageButton switchButton = (ImageButton) findViewById(R.id.buttonSwitch);
 
         searchButton.setOnClickListener(searchClick);
         dateTimeNowButton.setOnClickListener(timeAndDateNowClick);
+        switchButton.setOnClickListener(switchInputs);
     }
 
     private void populateFavouritesRecyclerView() {

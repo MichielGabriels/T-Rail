@@ -48,7 +48,6 @@ public class NotificationService extends IntentService {
         mTimer = new Timer();
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         createNotificationChannel();
-        System.out.println("notificationService started");
     }
 
     @Override
@@ -84,7 +83,6 @@ public class NotificationService extends IntentService {
                 if(mRoutes.size() == 0){
                     mTimer.cancel();
                     stopSelf();
-                    System.out.println("notification service stopped");
                 }
 
                 else{
@@ -95,7 +93,6 @@ public class NotificationService extends IntentService {
                                 notifyRoute(entry.getKey(),entry.getValue());
                             }
                         }
-                        System.out.println("notification service running..");
                     }
 
                     catch (ParseException ex){
@@ -136,18 +133,12 @@ public class NotificationService extends IntentService {
             long timeDifferenceMinutes = TimeService.differenceInTimeUnit(dateNow,routeDate,TimeUnit.MINUTES);
             if(timeDifferenceMinutes < 0){
                 mRoutes.remove(route);
-                System.out.println("route expired -> removed");
             }
         }
     }
 
-    //the wakeLock will wake the device, this way it shows notifications when the device is locked
     private void notifyRoute(long minutes,Route route){
-        /*PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"my:tag");
-        wakeLock.acquire();*/
         mNotificationManager.notify(NOTIFICATION_ID,buildNotification(minutes,route));
-        //wakeLock.release();
     }
 
 
