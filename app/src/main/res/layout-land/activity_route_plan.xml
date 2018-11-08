@@ -37,6 +37,7 @@
                     android:id="@+id/textViewFrom"
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
+                    android:imeOptions="flagNoExtractUi"
                     android:hint="@string/autoComplete_hint" />
             </LinearLayout>
 
@@ -75,6 +76,7 @@
                     android:id="@+id/textViewTo"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
+                    android:imeOptions="flagNoExtractUi"
                     android:hint="@string/autoComplete_hint" />
 
 
