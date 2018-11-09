@@ -2,23 +2,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="be.pxl.student.t_rail">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
+        android:name=".App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LaunchActivity" android:windowSoftInputMode="adjustNothing">
+        <activity
+            android:name=".HomeActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".RoutePlanActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".RouteMasterDetailActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".FavouritesActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RoutePlanActivity" android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".RouteDetailActivity" android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".RouteMasterActivity" android:windowSoftInputMode="adjustNothing"/>
+        <service android:name=".services.NotificationService"></service>
     </application>
 
 </manifest>

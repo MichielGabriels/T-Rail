@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- select stations-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--from-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="0dp">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp"
+                    android:gravity="center"
+                    android:text="@string/from"
+                    android:textSize="20dp" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/textViewFrom"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:imeOptions="flagNoExtractUi"
+                    android:hint="@string/autoComplete_hint" />
+            </LinearLayout>
+
+            <!--switch-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left">
+
+                <ImageButton
+                    android:id="@+id/buttonSwitch"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@null"
+                    android:src="@drawable/switch_text_icon" />
+            </LinearLayout>
+
+            <!--to-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:gravity="left"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/to"
+                    android:textSize="20dp"
+                    android:gravity="center"
+                    android:layout_marginRight="15dp"/>
+
+                <AutoCompleteTextView
+                    android:id="@+id/textViewTo"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="flagNoExtractUi"
+                    android:hint="@string/autoComplete_hint" />
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!--select date&time&search-->
+        <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginBottom="15dp">
+
+            <!-- date & time-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/editTextTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:hint="@string/time_hint" />
+
+                <EditText
+                    android:id="@+id/editTextDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/date_hint" />
+
+            </LinearLayout>
+
+            <!--now-->
+            <Button
+                android:id="@+id/buttonDateTimeNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:text="@string/now"></Button>
+
+            <!--search-->
+            <Button
+                android:id="@+id/buttonSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search"></Button>
+
+         </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!--favourites-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/favourites"
+            android:textSize="15dp"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewFavourites"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"></android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

@@ -1,4 +1,4 @@
-package be.pxl.student.t_rail.domainClasses;
+package be.pxl.student.t_rail.events;
 
 import android.view.View;
 

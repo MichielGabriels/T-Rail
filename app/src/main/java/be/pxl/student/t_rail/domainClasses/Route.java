@@ -1,6 +1,18 @@
 package be.pxl.student.t_rail.domainClasses;
 
-public class Route {
+import android.support.annotation.Nullable;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import be.pxl.student.t_rail.services.TimeService;
+
+public class Route implements Serializable {
 
     private String stationDeparture;
     private String stationArrival;
@@ -10,10 +22,12 @@ public class Route {
     private String delayArrival;
     private int platformDeparture;
     private int platformArrival;
+    private Vehicle vehicle;
+    private String date;
 
 
     public Route(String stationDeparture,String stationArrival,String timeDeparture,String timeArrival
-            ,String delayDeparture,String delayArrival,int platformDeparture,int platformArrival){
+            ,String delayDeparture,String delayArrival,int platformDeparture,int platformArrival,String trainId){
         setStationDeparture(stationDeparture);
         setStationArrival(stationArrival);
         setTimeDeparture(timeDeparture);
@@ -22,6 +36,29 @@ public class Route {
         setDelayArrival(delayArrival);
         setPlatformDeparture(platformDeparture);
         setPlatformArrival(platformArrival);
+        setVehicle(new Vehicle(trainId));
+    }
+
+
+    public Route(JSONObject jsonObject){
+        try{
+            JSONObject departureObject = jsonObject.getJSONObject("departure");
+            JSONObject arrivalObject = jsonObject.getJSONObject("arrival");
+
+            setStationDeparture(departureObject.getString("station"));
+            setStationArrival(arrivalObject.getString("station"));
+            setTimeDeparture(TimeService.extractTimeFromJsonObject(departureObject.getString("time")));
+            setTimeArrival(TimeService.extractTimeFromJsonObject(arrivalObject.getString("time")));
+            setDelayDeparture(departureObject.getString("delay"));
+            setDelayArrival(arrivalObject.getString("delay"));
+            setPlatformDeparture(departureObject.getInt("platform"));
+            setPlatformArrival(arrivalObject.getInt("platform"));
+            vehicle = new Vehicle(departureObject.getString("vehicle"));
+        }
+
+        catch (JSONException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
     public String getDelayDeparture() {
@@ -61,11 +98,11 @@ public class Route {
     }
 
     public void setDelayArrival(String delayArrival) {
-        this.delayArrival = delayArrival;
+        this.delayArrival = "+" + TimeService.convertDelayFromSecondsToMinutes(delayArrival);
     }
 
     public void setDelayDeparture(String delayDeparture) {
-        this.delayDeparture = delayDeparture;
+        this.delayDeparture = "+" + TimeService.convertDelayFromSecondsToMinutes(delayDeparture);
     }
 
     public void setStationDeparture(String stationDeparture) {
@@ -86,5 +123,32 @@ public class Route {
 
     public void setPlatformDeparture(int platformDeparture) {
         this.platformDeparture = platformDeparture;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        Route route = (Route) obj;
+        if(route.getDate().equals(getDate()) && route.getTimeArrival().equals(getTimeArrival()) && route.getTimeDeparture().equals(getTimeDeparture()) &&
+                route.getStationArrival().equals(getStationArrival()) && route.getStationDeparture().equals(getStationDeparture())){
+           return true;
+        }
+
+        return false;
     }
 }
